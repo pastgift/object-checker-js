@@ -29,7 +29,7 @@ var middlewareCreator = function(options) {
     for (var paramName in paramsOption) {
       var option = paramsOption[paramName];
       var isOptional = false;
-      if (typeof option.isOptional === 'boolean') {
+      if (option !== null && typeof option.isOptional === 'boolean') {
         isOptional = option.isOptional;
       }
 
@@ -48,7 +48,7 @@ var middlewareCreator = function(options) {
       }
       
       // Check value.
-      if (typeof option.matchRegExp !== 'undefined' && option.matchRegExp !== null) {
+      if (option !== null && typeof option.matchRegExp !== 'undefined' && option.matchRegExp !== null) {
         if (!option.matchRegExp.test(input)) {
           sendError(res, scopeOption, paramName, 'Invalid value, `' + input + '` not match `' + option.matchRegExp + '`');
           return;
