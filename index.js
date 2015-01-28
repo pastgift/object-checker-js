@@ -1,3 +1,5 @@
+'use strict'
+
 var sendError = function(res, scopeOption, paramName, errorMessage) {
   var response = '[ParamsPicker]';
   response += ' Scope: `' + scopeOption + '`';
@@ -27,9 +29,13 @@ var middlewareCreator = function(options) {
     }
 
     for (var paramName in paramsOption) {
-      var option = paramsOption[paramName];
+      var option = {};
+      if (paramsOption[paramName] !== null) {
+	option = paramsOption[paramName];
+      }
+
       var isOptional = false;
-      if (option !== null && typeof option.isOptional === 'boolean') {
+      if (typeof option.isOptional === 'boolean') {
         isOptional = option.isOptional;
       }
 
@@ -43,7 +49,7 @@ var middlewareCreator = function(options) {
         }
         else {
           sendError(res, scopeOption, paramName, 'Missing parameter.');
-          return;
+          return false;
         }
       }
       
@@ -51,7 +57,7 @@ var middlewareCreator = function(options) {
       if (option !== null && typeof option.matchRegExp !== 'undefined' && option.matchRegExp !== null) {
         if (!option.matchRegExp.test(input)) {
           sendError(res, scopeOption, paramName, 'Invalid value, `' + input + '` not match `' + option.matchRegExp + '`');
-          return;
+          return false;
         }
       }
     }
@@ -61,7 +67,7 @@ var middlewareCreator = function(options) {
       for (var reqParamName in req[scopeOption]) {
         if (typeof paramsOption[reqParamName] === 'undefined') {
           sendError(res, scopeOption, reqParamName, 'Unexpected parameter');
-          return;
+          return false;
         }
       }
     }
