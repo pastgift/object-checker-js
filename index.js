@@ -23,7 +23,7 @@ var middlewareCreator = function(options) {
       strictOption = options.strict;
     }
 
-    var paramsOption = null
+    var paramsOption = {}
     if (typeof options.params === 'object') {
       paramsOption = options.params;
     }
