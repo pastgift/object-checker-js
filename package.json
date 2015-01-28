@@ -1,5 +1,5 @@
 {
-  "name": "express-paramsPicker",
+  "name": "express-paramspicker",
   "version": "0.0.1",
   "description": "Express request checker extension.",
   "main": "index.js",
