@@ -2,7 +2,7 @@
   "name": "express-request-checker",
   "version": "0.0.7",
   "description": "Express request checker extension.",
-  "main": "index.js",
+  "main": "express-request-checker.js",
   "devDependencies": {
     "mocha": "2.0.1"
   },
