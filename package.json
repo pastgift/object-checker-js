@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pastgift/express-paramsPicker.git"
+    "url": "https://github.com/pastgift/express-request-checker.git"
   },
   "keywords": [
     "validation",
@@ -19,7 +19,7 @@
   "author": "Yiling Zhou <pastgift@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pastgift/express-paramsPicker/issues"
+    "url": "https://github.com/pastgift/express-request-checker/issues"
   },
-  "homepage": "https://github.com/pastgift/express-paramsPicker"
+  "homepage": "https://github.com/pastgift/express-request-checker"
 }
