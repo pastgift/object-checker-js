@@ -1,5 +1,3 @@
-'use strict';
-
 var sendError = function(res, scopeOption, paramName, errorMessage) {
   var response = '[ParamsPicker]';
   response += ' Scope: `' + scopeOption + '`';
@@ -14,7 +12,7 @@ var middlewareCreator = function(options) {
     var scopeOption = 'query';
     if (typeof options.scope === 'string') {
       if (options.scope === 'query' || options.scope === 'body') {
-	scopeOption = options.scope;
+        scopeOption = options.scope;
       }
     }
 
@@ -23,8 +21,8 @@ var middlewareCreator = function(options) {
       strictOption = options.strict;
     }
 
-    var paramsOption = {}
-    if (typeof options.params === 'object') {
+    var paramsOption = {};
+    if (typeof options.params !== 'undefined' && options.params !== null) {
       paramsOption = options.params;
     }
 
@@ -32,7 +30,7 @@ var middlewareCreator = function(options) {
       var option = paramsOption[paramName];
       var isOptional = false;
       if (typeof option.isOptional === 'boolean') {
-	isOptional = option.isOptional;
+        isOptional = option.isOptional;
       }
 
       var input = req[scopeOption][paramName];
@@ -44,17 +42,17 @@ var middlewareCreator = function(options) {
           continue;
         }
         else {
-	  sendError(res, scopeOption, paramName, 'Missing parameter.');
-	  return;
+          sendError(res, scopeOption, paramName, 'Missing parameter.');
+          return;
         }
       }
       
       // Check value.
       if (typeof option.matchRegExp !== 'undefined' && option.matchRegExp !== null) {
-	if (!option.matchRegExp.test(input)) {
-	  sendError(res, scopeOption, paramName, 'Invalid value, `' + input + '` not match `' + option.matchRegExp + '`');
-	  return;
-	}
+        if (!option.matchRegExp.test(input)) {
+          sendError(res, scopeOption, paramName, 'Invalid value, `' + input + '` not match `' + option.matchRegExp + '`');
+          return;
+        }
       }
     }
 
@@ -62,8 +60,8 @@ var middlewareCreator = function(options) {
     if (strictOption === true) {
       for (var reqParamName in req[scopeOption]) {
         if (typeof paramsOption[reqParamName] === 'undefined') {
-	  sendError(res, scopeOption, reqParamName, 'Unexpected parameter');
-	  return;
+          sendError(res, scopeOption, reqParamName, 'Unexpected parameter');
+          return;
         }
       }
     }
