@@ -1,6 +1,10 @@
 {
   "name": "express-request-checker",
+<<<<<<< Updated upstream
   "version": "0.0.7",
+=======
+  "version": "0.0.9",
+>>>>>>> Stashed changes
   "description": "Express request checker extension.",
   "main": "express-request-checker.js",
   "devDependencies": {

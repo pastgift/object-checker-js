@@ -55,10 +55,39 @@ router.get '/path', reqChecker(options), handlerFunction
 module.exports = router
 ```
 
+### Parameter Options Index
+
+
+Option      |Default Value
+--------------------------
+isOptional  |`false`
+
+assertTrue  |`[]`
+assertFalse |`[]`
+
+matchRegExp |`[]`
+
+isIn        |`[]`
+notIn       |`[]`
+
+isInteger   |`null`
+isEmail     |`null`
+
+equal       |`null`
+greaterThan |`null`
+greaterEqual|`null`
+lessThan    |`null`
+lessEqual   |`null`
+
+allowEmpty  |`false`
+
+minLength   |`null`
+maxLangth   |`null`
+
 ### Parameter Options
 #### assertTrue
-A `function` which use parameter in request as its argument, or an `array` of such functions.  
-If the function return `true`, check OK. Otherwise, check error.
+`function`, `[function, function ...]` or `[]`. (DEFAULT: `[]` - No checker)  
+Using parameter in request as function(s)'s argument, if the function(s) return `true`,OK. Otherwise, NG.
 
 Example:
 
@@ -76,8 +105,8 @@ option = {
 Opposite to `assertTrue`.
 
 #### matchRegExp
-A `RegExp` or an `array` of `RegExp`s.  
-If the `RegExp` test result is `true`, check OK. Otherwise, check error.
+`RegExp`, `[RegExp, RegExp ...]` or `[]`. (DEFAULT: `[]` - Don't check)  
+If the RegExp(s) test result is `true`, OK. Otherwise, NG.
 
 Example:
 
@@ -92,8 +121,8 @@ option = {
 ```
 
 #### isIn
-A `array` which are allowed values of parameter in request.  
-if the value of parameter in request equals to any element in `array`, check OK. Otherwise, check error.
+`[value, value, ...]` or `[]`. (DEFAULT: `[]` - Don't check)  
+Values of parameter in request which are allowed.  
 
 Example:
 
@@ -111,9 +140,9 @@ option = {
 Opposite to `isIn`.
 
 #### isInteger
-`true` or `false`.  
-when setted `true`, the parameter in request must be an `integer`.  
-when setted `false `, the parameter in request must NOT be an `integer`.  
+`true` or `false`. (DEFALT:`null` - Don't care)  
+when `true`, The value of parameter in request must be an `integer`.  
+when `false `, The value of parameter in request must NOT be an `integer`.  
 
 Example:
 
@@ -127,8 +156,10 @@ option = {
 }
 ```
 
-#### max
-`integer`. the parameter in request must be equal or less then `max`.
+#### isEmail
+`true` or `false`. (DEFALT:`null` - Don't care)  
+when `true`, The value of parameter in request must be an correct email address.  
+when `false `, The value of parameter in request must NOT be an email address.  
 
 Example:
 
@@ -136,15 +167,65 @@ Example:
 option = {
   params: {
     param1: {
-      max: 100
+      isEmail: true
     }
   }
 }
 ```
 
-#### min
-Opposite to `max`.
+#### equal / greaterThan / greaterEqual / lessThan / lessEqual
+`integer` or `null`. (DEFALT:`null` - Don't care)  
+The value of parameter in request must be equal/greaterThan/greaterEqual/lessThan/lessEqual to the option value.
 
+<<<<<<< Updated upstream
+=======
+Example:
+
+```javascript
+option = {
+  params: {
+    param1: {
+      equal: 100
+    }
+  }
+}
+```
+
+#### allowEmpty
+`true` or `false`. (DEFAULT: `false`)  
+when setted `true`, The value of parameter in request can be `''`.  
+when setted `true`, The value of parameter in request can NOT be `''`.  
+
+Example:
+
+```javascript
+option = {
+  params: {
+    param1: {
+      isEmpty: false
+    }
+  }
+}
+```
+
+#### maxLength / minLength
+`integer` or `null`. (DEFALT:`null` - Don't care)  
+Max/Min Length of the value of parameter in request.
+
+Example:
+
+```javascript
+option = {
+  params: {
+    param1: {
+      minLength: 5,
+      maxLength: 10
+    }
+  }
+}
+```
+
+>>>>>>> Stashed changes
 ### Install:
 ```shell
 npm install express-request-checker
