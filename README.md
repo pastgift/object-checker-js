@@ -176,8 +176,6 @@ option = {
 `integer` or `null`. (DEFALT:`null` - Don't care)  
 The value of parameter in request must be equal/greaterThan/greaterEqual/lessThan/lessEqual to the option value.
 
-<<<<<<< Updated upstream
-=======
 Example:
 
 ```javascript
