@@ -1,6 +1,6 @@
 {
   "name": "express-request-checker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Express request checker extension.",
   "main": "express-request-checker.js",
   "devDependencies": {
@@ -15,12 +15,16 @@
     "url": "https://github.com/pastgift/express-request-checker.git"
   },
   "keywords": [
+    "request",
+    "checker",
     "validation",
     "validator",
-    "query",
-    "body"
+    "middleware"
   ],
-  "author": "Yiling Zhou <pastgift@gmail.com>",
+  "author": {
+    "name": "Yiling Zhou",
+    "email": "pastgift@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pastgift/express-request-checker/issues"

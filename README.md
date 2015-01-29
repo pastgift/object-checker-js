@@ -1,7 +1,16 @@
 # express-request-checker
-Create request checker middleware with options for Express.
 
-with express-request-checker, checking HTTP request's `query` or `body` will be more easy and readable. All the works is just `require` express-request-checker in `router.js` which belong to an Express project and config it. So it's no need to modify any other source file.
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
+
+Create request checker middleware for Express.
+
+with express-request-checker, checking HTTP request's `query`， `body` or url `params` will be more easy and readable. All the works is just `require` express-request-checker in `router.js` which belongs to an Express project and config it. So it's no need to modify any other source file.
+
+Since validation codes are written in a config-like way, `router.js` file will look like an API document, I hope that the communication cost within the development team can be reduced.
+
+- No validation codes.
+- `router.js` is also an API document.
+- Easy to combine with other validation package.
 
 ### Quick Example(Javascript):
 ```javascript
@@ -14,9 +23,8 @@ var reqChecker = reqCheckerModule.requestChecker;
 var router = express.Router();
 
 var options = {
-  scope: 'query', // Check scope. ('query'|'body', DEFAULT: 'query')
   strict: false,  // Allow unexpected parameter. (true|false, DEFAULT: true)
-  params: {       // Paramters.
+  query: {        // Check req.query. (params|query|body)
     'param1': {
       matchRegExp: /^[0-9]{1}$/
     },
@@ -42,9 +50,8 @@ reqChecker = reqCheckerModule.requestChecker
 router = express.Router()
 
 options =
-  scope: 'query' # Check scope. ('query'|'body', DEFAULT: 'query')
   strict: false  # Allow unexpected parameter. (true|false, DEFAULT: true)
-  params:        # Paramters.
+  query:         # Check req.query. (params|query|body)
     'param1':
       matchRegExp: /^[0-9]{1}$/
     'param2':
@@ -68,6 +75,11 @@ var router = express.Router();
 var validator = require('validator');
 var options = {
   params: {
+    'id': {
+      assertTrue: validator.isInt
+    }
+  },
+  body: {
     'email': {
       assertTrue: validator.isEmail
     },
@@ -76,7 +88,7 @@ var options = {
     }
   }
 };
-router.get('/path', reqChecker(options), handlerFunction);
+router.post('/user/:id', reqChecker(options), handlerFunction);
 
 module.exports = router;
 ```
@@ -85,7 +97,6 @@ module.exports = router;
 
 |Option      |Default Value|
 |------------|-------------|
-|scope       |`query`      |
 |strict      |`true`       |
 
 ### Parameter Options Default Values
@@ -118,7 +129,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       assertTrue: [function(value) { return value > 10; }]
     }
@@ -137,7 +148,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       matchRegExp: [/^[012]{1}$/, /^[234]{1}$/]
     }
@@ -153,7 +164,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       isIn: [1, 2, 3]
     }
@@ -173,7 +184,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       isInteger: true
     }
@@ -190,7 +201,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       isEmail: true
     }
@@ -206,7 +217,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       equal: 100
     }
@@ -223,7 +234,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       isEmpty: false
     }
@@ -239,7 +250,7 @@ Example:
 
 ```javascript
 option = {
-  params: {
+  query: {
     param1: {
       minLength: 5,
       maxLength: 10
@@ -261,3 +272,8 @@ npm test
 
 ### License
 [MIT](LICENSE)
+
+[downloads-image]: http://img.shields.io/npm/dm/express-request-checker.svg
+
+[npm-url]: https://npmjs.org/package/express-request-checker
+[npm-image]: http://img.shields.io/npm/v/express-request-checker.svg
