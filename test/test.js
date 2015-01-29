@@ -18,9 +18,6 @@ describe('main', function() {
     return true;
   };
 
-  /************/
-  /*  v0.0.6  */
-  /************/
   it('1-1 scope: default, strict: default -> No params required, Got 1 param', function() {
     options = { params: null };
     fakeReq = { query: { param1: 1 } };
@@ -179,9 +176,6 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  /************/
-  /*  v0.0.7  */
-  /************/
   it('A-1 scope: default, strict: default -> 1 param required(assertTrue), Got 1 valid param', function() {
     options = { params: {
       param1: { assertTrue: function(v) { return v > 5; } }
@@ -499,7 +493,6 @@ describe('main', function() {
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-
   it('J-4 scope: default, strict: default -> 1 param required(allowEmpty:false), Got 1 non-empty param', function() {
     options = { params: {
       param1: { allowEmpty: false}
@@ -546,6 +539,50 @@ describe('main', function() {
     } };
     fakeReq = { query: {
       param1: "hell"
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  /****************************/
+  /* Play with other packages */
+  /****************************/
+  var validator = require('validator');
+  it('CO-1 scope: default, strict: default -> 1 param required(play with `validator`), Got 1 valid param', function() {
+    options = { params: {
+      param1: { assertTrue: validator.isEmail}
+    } };
+    fakeReq = { query: {
+      param1: "foo@bar.com"
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('CO-2 scope: default, strict: default -> 1 param required(play with `validator`), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { assertTrue: validator.isEmail}
+    } };
+    fakeReq = { query: {
+      param1: "foo@.com"
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('CO-3 scope: default, strict: default -> 1 param required(play with `validator`), Got 1 valid param', function() {
+    options = { params: {
+      param1: { assertTrue: validator.isJSON}
+    } };
+    fakeReq = { query: {
+      param1: '{"foo":1, "bar":2}'
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('CO-4 scope: default, strict: default -> 1 param required(play with `validator`), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { assertTrue: validator.isJSON}
+    } };
+    fakeReq = { query: {
+      param1: '{"foo":1 "bar":2}'
     } };
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
