@@ -55,6 +55,32 @@ router.get '/path', reqChecker(options), handlerFunction
 module.exports = router
 ```
 
+### Play with other modules
+```javascript
+// router.js
+
+var express          = require('express');
+var reqCheckerModule = require('express-request-checker');
+
+var reqChecker = reqCheckerModule.requestChecker;
+var router = express.Router();
+
+var validator = require('validator');
+var options = {
+  params: {
+    'email': {
+      assertTrue: validator.isEmail
+    },
+    'jsonData': {
+      assertTrue: validator.isJSON
+    }
+  }
+};
+router.get('/path', reqChecker(options), handlerFunction);
+
+module.exports = router;
+```
+
 ### Checker Options Default Values
 
 |Option      |Default Value|
