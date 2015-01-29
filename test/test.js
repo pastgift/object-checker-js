@@ -10,7 +10,8 @@ describe('main', function() {
     send: function(data) {
       console.log(data);
       return false;
-    }
+    },
+    status: function(status) {}
   };
 
   fakeNext = function() {
@@ -118,7 +119,7 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('4-1 scope: default, strict: default -> 1 param required(RegExp), Got 1 valid param', function() {
+  it('4-1 scope: default, strict: default -> 1 param required(matchRegExp), Got 1 valid param', function() {
     options = { strict: false, params: {
       param1: { matchRegExp: /^[1]{1}$/ }
     } };
@@ -128,7 +129,7 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('4-2 scope: default, strict: default -> 1 param required(RegExp), Got 1 invalid param', function() {
+  it('4-2 scope: default, strict: default -> 1 param required(matchRegExp), Got 1 invalid param', function() {
     options = { strict: false, params: {
       param1: { matchRegExp: /^[1]{1}$/ }
     } };
@@ -327,9 +328,49 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('G-1 scope: default, strict: default -> 1 param required(max), Got 1 valid param', function() {
+  it('F-5 scope: default, strict: default -> 1 param required(isEmail:true), Got 1 email', function() {
     options = { params: {
-      param1: { max: 5 }
+      param1: { isEmail: true }
+    } };
+    fakeReq = { query: {
+      param1: 'abc@123.com'
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('F-6 scope: default, strict: default -> 1 param required(isEmail:true), Got 1 non-email', function() {
+    options = { params: {
+      param1: { isEmail: true }
+    } };
+    fakeReq = { query: {
+      param1: 'abc.123.com'
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('F-7 scope: default, strict: default -> 1 param required(isEmail:false), Got 1 email', function() {
+    options = { params: {
+      param1: { isEmail: false }
+    } };
+    fakeReq = { query: {
+      param1: 'abc@123.com'
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('F-8 scope: default, strict: default -> 1 param required(isEmail:false), Got 1 non-email', function() {
+    options = { params: {
+      param1: { isEmail: false }
+    } };
+    fakeReq = { query: {
+      param1: 'abc.123.com'
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('G-1 scope: default, strict: default -> 1 param required(equal), Got 1 valid param', function() {
+    options = { params: {
+      param1: { equal: 5 }
     } };
     fakeReq = { query: {
       param1: 5
@@ -337,9 +378,9 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('G-2 scope: default, strict: default -> 1 param required(max), Got 1 invalid param', function() {
+  it('G-2 scope: default, strict: default -> 1 param required(equal), Got 1 invalid param', function() {
     options = { params: {
-      param1: { max: 5 }
+      param1: { equal: 5 }
     } };
     fakeReq = { query: {
       param1: 6
@@ -347,9 +388,29 @@ describe('main', function() {
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('H-1 scope: default, strict: default -> 1 param required(min), Got 1 valid param', function() {
+  it('H-1 scope: default, strict: default -> 1 param required(greaterThan), Got 1 valid param', function() {
     options = { params: {
-      param1: { min: 5 }
+      param1: { greaterThan: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 6
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('H-2 scope: default, strict: default -> 1 param required(greaterThan), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { greaterThan: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 5
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('H-3 scope: default, strict: default -> 1 param required(greaterEqual), Got 1 valid param', function() {
+    options = { params: {
+      param1: { greaterEqual: 5 }
     } };
     fakeReq = { query: {
       param1: 5
@@ -357,9 +418,9 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('H-2 scope: default, strict: default -> 1 param required(min), Got 1 invalid param', function() {
+  it('H-4 scope: default, strict: default -> 1 param required(greaterEqual), Got 1 invalid param', function() {
     options = { params: {
-      param1: { min: 5 }
+      param1: { greaterEqual: 5 }
     } };
     fakeReq = { query: {
       param1: 4
@@ -367,9 +428,49 @@ describe('main', function() {
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('J-1 scope: default, strict: default -> 1 param required(isEmpty:true), Got 1 empty param', function() {
+  it('I-1 scope: default, strict: default -> 1 param required(lessThan), Got 1 valid param', function() {
     options = { params: {
-      param1: { isEmpty: true}
+      param1: { lessThan: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 4
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('I-2 scope: default, strict: default -> 1 param required(lessThan), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { lessThan: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 5
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('I-3 scope: default, strict: default -> 1 param required(lessEqual), Got 1 valid param', function() {
+    options = { params: {
+      param1: { lessEqual: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 5
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('I-4 scope: default, strict: default -> 1 param required(lessEqual), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { lessEqual: 5 }
+    } };
+    fakeReq = { query: {
+      param1: 6
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('J-1 scope: default, strict: default -> 1 param required(allowEmpty:true), Got 1 empty param', function() {
+    options = { params: {
+      param1: { allowEmpty: true}
     } };
     fakeReq = { query: {
       param1: ""
@@ -377,19 +478,20 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('J-2 scope: default, strict: default -> 1 param required(isEmpty:true), Got 1 non-empty param', function() {
+  it('J-2 scope: default, strict: default -> 1 param required(allowEmpty:true), Got 1 non-empty param', function() {
     options = { params: {
-      param1: { isEmpty: true}
+      param1: { allowEmpty: true}
+
     } };
     fakeReq = { query: {
       param1: "hello"
     } };
-    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('J-3 scope: default, strict: default -> 1 param required(isEmpty:false), Got 1 empty param', function() {
+  it('J-3 scope: default, strict: default -> 1 param required(allowEmpty:false), Got 1 empty param', function() {
     options = { params: {
-      param1: { isEmpty: false}
+      param1: { allowEmpty: false}
     } };
     fakeReq = { query: {
       param1: ""
@@ -397,13 +499,54 @@ describe('main', function() {
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-  it('J-4 scope: default, strict: default -> 1 param required(isEmpty:false), Got 1 non-empty param', function() {
+
+  it('J-4 scope: default, strict: default -> 1 param required(allowEmpty:false), Got 1 non-empty param', function() {
     options = { params: {
-      param1: { isEmpty: false}
+      param1: { allowEmpty: false}
     } };
     fakeReq = { query: {
       param1: "hello"
     } };
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('K-1 scope: default, strict: default -> 1 param required(maxLength), Got 1 valid param', function() {
+    options = { params: {
+      param1: { maxLength: 5}
+    } };
+    fakeReq = { query: {
+      param1: "hello"
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('K-2 scope: default, strict: default -> 1 param required(maxLength), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { maxLength: 5}
+    } };
+    fakeReq = { query: {
+      param1: "hello "
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('K-3 scope: default, strict: default -> 1 param required(minLength), Got 1 valid param', function() {
+    options = { params: {
+      param1: { minLength: 5}
+    } };
+    fakeReq = { query: {
+      param1: "hello"
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('K-4 scope: default, strict: default -> 1 param required(minLength), Got 1 invalid param', function() {
+    options = { params: {
+      param1: { minLength: 5}
+    } };
+    fakeReq = { query: {
+      param1: "hell"
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 });
