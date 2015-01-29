@@ -76,7 +76,8 @@ var completeOptions = function(reqOptions) {
         notIn:       [],
         isInteger:   null,
         max:         null,
-        min:         null
+        min:         null,
+        isEmpty:     null
       };
 
       var paramOptions = reqOptions.params[k];
@@ -125,6 +126,11 @@ var completeOptions = function(reqOptions) {
         // min
         if (isSetted(paramOptions.min) && isInteger(paramOptions.min)) {
           fullParamOptions.min = paramOptions.min;
+        }
+
+        // isEmpty
+        if (isSetted(paramOptions.isEmpty)) {
+          fullParamOptions.isEmpty = paramOptions.isEmpty;
         }
       }
 
@@ -243,6 +249,12 @@ var requestChecker = function(reqOptions) {
       // Check value - min
       if (isSetted(paramOpt.min) && input < paramOpt.min) {
         sendError(res, opt.scope, k, invalidValueMessage(input), 'min, ' + paramOpt.min);
+        return false;
+      }
+
+      // Check value - isEmpty
+      if (isSetted(paramOpt.isEmpty) && (paramOpt.isEmpty ^ input === '')) {
+        sendError(res, opt.scope, k, invalidValueMessage(input), 'isEmpty, ' + paramOpt.isEmpty);
         return false;
       }
     }

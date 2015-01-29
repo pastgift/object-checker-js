@@ -145,6 +145,23 @@ option = {
 #### min
 Opposite to `max`.
 
+#### isEmpty
+`true` or `false`.  
+when setted `true`, the parameter in request must be `''`.  
+when setted `false `, the parameter in request must NOT be `''`.  
+
+Example:
+
+```javascript
+option = {
+  params: {
+    param1: {
+      isEmpty: false
+    }
+  }
+}
+```
+
 ### Install:
 ```shell
 npm install express-request-checker

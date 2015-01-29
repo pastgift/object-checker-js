@@ -366,4 +366,44 @@ describe('main', function() {
     } };
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
+
+  it('J-1 scope: default, strict: default -> 1 param required(isEmpty:true), Got 1 empty param', function() {
+    options = { params: {
+      param1: { isEmpty: true}
+    } };
+    fakeReq = { query: {
+      param1: ""
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('J-2 scope: default, strict: default -> 1 param required(isEmpty:true), Got 1 non-empty param', function() {
+    options = { params: {
+      param1: { isEmpty: true}
+    } };
+    fakeReq = { query: {
+      param1: "hello"
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('J-3 scope: default, strict: default -> 1 param required(isEmpty:false), Got 1 empty param', function() {
+    options = { params: {
+      param1: { isEmpty: false}
+    } };
+    fakeReq = { query: {
+      param1: ""
+    } };
+    assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
+
+  it('J-4 scope: default, strict: default -> 1 param required(isEmpty:false), Got 1 non-empty param', function() {
+    options = { params: {
+      param1: { isEmpty: false}
+    } };
+    fakeReq = { query: {
+      param1: "hello"
+    } };
+    assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+  });
 });
