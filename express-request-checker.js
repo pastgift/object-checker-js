@@ -1,5 +1,25 @@
 'use strict'
 
+var defaultHeaders = {
+  "Content-Type": "application/json"
+};
+
+var defaultFormat = JSON.stringify(
+  {
+    error: {
+      reporter    : "express-request-checker",
+      scope       : "`{{scope}}`",
+      paramName   : "`{{paramName}}`",
+      errorMessage: "{{errorMessage}}. {{errorDetail}}"
+    }
+  }
+);
+
+var sendErrorDetailFlag = false;
+var errorHttpStatusCode = 400;
+var errorHttpResponseHeaders = defaultHeaders;
+var errorHttpResponseBodyFormat = defaultFormat;
+
 var isSetted = function(obj) {
   if (typeof obj !== 'undefined' && obj !== null) {
     return true;
@@ -14,23 +34,27 @@ var invalidValueErrorMessage = function(v) {
 }
 
 var sendError = function(res, scope, paramName, errorMessage, errorDetail) {
-  var response = module.exports.errorMessageFormat;
+  var response = errorHttpResponseBodyFormat;
   response = response.replace('{{scope}}',        scope,        'g');
   response = response.replace('{{paramName}}',    paramName,    'g');
   response = response.replace('{{errorMessage}}', errorMessage, 'g');
 
-  if (module.exports.DEBUG_ENABLED && isSetted(errorDetail)) {
+  if (sendErrorDetailFlag && isSetted(errorDetail)) {
     response = response.replace('{{errorDetail}}', errorDetail, 'g');
   }
   else {
-    response = response.replace('{{errorDetail}}', ''); 
+    response = response.replace('{{errorDetail}}', '');
   }
 
-  var httpStatus = module.exports.errorHttpStatus;
+  var httpStatus = errorHttpStatusCode;
   if (!isInteger(httpStatus)) {
     httpStatus = 400;
   }
 
+  for (var headerKey in errorHttpResponseHeaders) {
+    var headerValue = errorHttpResponseHeaders[headerKey];
+    res.set(headerKey, headerValue);
+  }
   res.status(httpStatus);
   res.send(response);
 };
@@ -138,7 +162,7 @@ var completeOptions = function(reqOptions) {
           optionName = optionArray[i];
           if (isSetted(paramOptions[optionName])) {
             fullParamOptions[optionName] = paramOptions[optionName];
-          }          
+          }
         }
 
         // (array#function) assertTrue, assertFalse
@@ -147,7 +171,7 @@ var completeOptions = function(reqOptions) {
           optionName = optionArray[i];
           if (isSetted(paramOptions[optionName])) {
             fullParamOptions[optionName] = convertToArray(paramOptions[optionName], 'function');
-          }          
+          }
         }
 
         // (array) matchRegExp, isIn, notIn
@@ -341,7 +365,20 @@ var requestChecker = function(reqOptions) {
   return middleware;
 };
 
-module.exports.DEBUG_ENABLED  = false;
-module.exports.errorHttpStatus = 400;
-module.exports.errorMessageFormat = '[express-request-checker] Scope: `{{scope}}`, ParamName: `{{paramName}}`, ErrorMessage: {{errorMessage}}. {{errorDetail}}';
+module.exports.SEND_ERROR_DETAIL = function(enabled) {
+  sendErrorDetailFlag = enabled;
+};
+
+module.exports.setErrorHttpStatusCode = function(code) {
+  errorHttpStatusCode = code;
+};
+
+module.exports.setErrorHttpResponseHeaders = function(headers) {
+  errorHttpResponseHeaders = headers;
+};
+
+module.exports.setErrorHttpResponseBodyFormat = function(format) {
+  errorHttpResponseBodyFormat = format;
+};
+
 module.exports.requestChecker = requestChecker;

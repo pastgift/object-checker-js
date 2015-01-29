@@ -7,16 +7,12 @@ describe('main', function() {
 
   var options, fakeReq, fakeRes, fakeNext
   fakeRes = {
-    send: function(data) {
-      console.log(data);
-      return false;
-    },
-    status: function(status) {}
+    send:   function(data)   { console.log(data); return false;},
+    status: function(status) { console.log('status: ' + status);},
+    set:    function(k, v)   { console.log('set header: ' + k + ', ' + v);}
   };
 
-  fakeNext = function() {
-    return true;
-  };
+  fakeNext = function() { return true; };
 
   it('1-1 scope: default, strict: default -> No params required, Got 1 param', function() {
     options = { params: null };
@@ -538,7 +534,7 @@ describe('main', function() {
       param1: { minLength: 5}
     } };
     fakeReq = { query: {
-      param1: "hell"
+      param1: "Oops"
     } };
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });

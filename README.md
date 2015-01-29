@@ -1,7 +1,16 @@
 # express-request-checker
-Create request checker middleware with options for Express.
 
-with express-request-checker, checking HTTP request's `query` or `body` will be more easy and readable. All the works is just `require` express-request-checker in `router.js` which belong to an Express project and config it. So it's no need to modify any other source file.
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
+
+Create request checker middleware for Express.
+
+with express-request-checker, checking HTTP request's `query` or `body` will be more easy and readable.   All the works is just `require` express-request-checker in `router.js` which belongs to an Express project and config it. So it's no need to modify any other source file.
+
+Since validation codes are written in a config-like way, `router.js` file will look like an API document, I hope that the communication cost within the development team can be reduced.
+
+- No validation codes.
+- `router.js` is also an API document.
+- Easy to combine with other validation package.
 
 ### Quick Example(Javascript):
 ```javascript
@@ -261,3 +270,8 @@ npm test
 
 ### License
 [MIT](LICENSE)
+
+[downloads-image]: http://img.shields.io/npm/dm/express-request-checker.svg
+
+[npm-url]: https://npmjs.org/package/express-request-checker
+[npm-image]: http://img.shields.io/npm/v/express-request-checker.svg
