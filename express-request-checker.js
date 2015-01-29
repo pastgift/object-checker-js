@@ -94,20 +94,7 @@ var completeOptions = function(reqOptions) {
     for (var k in reqOptions.params) {
       // DEFAULT parameter options
       var fullParamOptions = {
-<<<<<<< Updated upstream
-        isOptional:  false,
-        assertTrue:  [],
-        assertFalse: [],
-        matchRegExp: [],
-        isIn:        [],
-        notIn:       [],
-        isInteger:   null,
-        max:         null,
-        min:         null
-      };
-=======
         isOptional:   false,
->>>>>>> Stashed changes
 
         assertTrue:   [],
         assertFalse:  [],
@@ -180,8 +167,6 @@ var completeOptions = function(reqOptions) {
             fullParamOptions[optionName] = paramOptions[optionName];
           }
         }
-<<<<<<< Updated upstream
-=======
 
         // (integer|null) maxLength, minLength
         optionArray = ['maxLength', 'minLength'];
@@ -191,7 +176,6 @@ var completeOptions = function(reqOptions) {
             fullParamOptions[optionName] = paramOptions[optionName];
           }
         }
->>>>>>> Stashed changes
       }
 
       fullReqOptions.params[k] = fullParamOptions;
@@ -331,15 +315,12 @@ var requestChecker = function(reqOptions) {
         sendError(res, opt.scope, k, invalidValueErrorMessage(input), 'maxLength, ' + paramOpt.maxLength);
         return false;
       }
-<<<<<<< Updated upstream
-=======
 
       // Check value - minLength
       if (isSetted(paramOpt.minLength) && ('' + input).length < paramOpt.minLength) {
         sendError(res, opt.scope, k, invalidValueErrorMessage(input), 'minLength, ' + paramOpt.minLength);
         return false;
       }
->>>>>>> Stashed changes
     }
 
     // Check OK

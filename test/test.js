@@ -427,8 +427,6 @@ describe('main', function() {
     } };
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
-<<<<<<< Updated upstream
-=======
 
   it('I-1 scope: default, strict: default -> 1 param required(lessThan), Got 1 valid param', function() {
     options = { params: {
@@ -549,5 +547,4 @@ describe('main', function() {
     } };
     assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
->>>>>>> Stashed changes
 });

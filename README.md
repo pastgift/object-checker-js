@@ -55,34 +55,33 @@ router.get '/path', reqChecker(options), handlerFunction
 module.exports = router
 ```
 
-### Parameter Options Index
+### Checker Options Default Values
 
+|Option      |Default Value|
+|------------|-------------|
+|scope       |`query`      |
+|strict      |`true`       |
 
-Option      |Default Value
---------------------------
-isOptional  |`false`
+### Parameter Options Default Values
 
-assertTrue  |`[]`
-assertFalse |`[]`
-
-matchRegExp |`[]`
-
-isIn        |`[]`
-notIn       |`[]`
-
-isInteger   |`null`
-isEmail     |`null`
-
-equal       |`null`
-greaterThan |`null`
-greaterEqual|`null`
-lessThan    |`null`
-lessEqual   |`null`
-
-allowEmpty  |`false`
-
-minLength   |`null`
-maxLangth   |`null`
+|Option      |Default Value|
+|------------|-------------|
+|isOptional  |`false`      |
+|assertTrue  |`[]`         |
+|assertFalse |`[]`         |
+|matchRegExp |`[]`         |
+|isIn        |`[]`         |
+|notIn       |`[]`         |
+|isInteger   |`null`       |
+|isEmail     |`null`       |
+|equal       |`null`       |
+|greaterThan |`null`       |
+|greaterEqual|`null`       |
+|lessThan    |`null`       |
+|lessEqual   |`null`       |
+|allowEmpty  |`false`      |
+|minLength   |`null`       |
+|maxLangth   |`null`       |
 
 ### Parameter Options
 #### assertTrue
