@@ -200,7 +200,7 @@ describe('main', function() {
     assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
   });
 
-
+  
   // ----- Value Checking -----
 
   var scopes = ['params', 'query', 'body'];
