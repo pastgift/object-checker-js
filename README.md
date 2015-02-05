@@ -101,24 +101,26 @@ module.exports = router;
 
 ### Parameter Options Default Values
 
-|Option      |Default Value|
-|------------|-------------|
-|isOptional  |`false`      |
-|assertTrue  |`[]`         |
-|assertFalse |`[]`         |
-|matchRegExp |`[]`         |
-|isIn        |`[]`         |
-|notIn       |`[]`         |
-|isInteger   |`null`       |
-|isEmail     |`null`       |
-|equal       |`null`       |
-|greaterThan |`null`       |
-|greaterEqual|`null`       |
-|lessThan    |`null`       |
-|lessEqual   |`null`       |
-|allowEmpty  |`false`      |
-|minLength   |`null`       |
-|maxLangth   |`null`       |
+|Option        |Default Value|
+|--------------|-------------|
+|isOptional    |`false`      |
+|assertTrue    |`[]`         |
+|assertFalse   |`[]`         |
+|matchRegExp   |`[]`         |
+|isIn          |`[]`         |
+|notIn         |`[]`         |
+|isInteger     |`null`       |
+|isEmail       |`null`       |
+|isArray       |`null`       |
+|isIntegerArray|`null`       |
+|equal         |`null`       |
+|greaterThan   |`null`       |
+|greaterEqual  |`null`       |
+|lessThan      |`null`       |
+|lessEqual     |`null`       |
+|allowEmpty    |`false`      |
+|minLength     |`null`       |
+|maxLangth     |`null`       |
 
 ### Parameter Options
 #### assertTrue
@@ -204,6 +206,40 @@ option = {
   query: {
     param1: {
       isEmail: true
+    }
+  }
+}
+```
+
+#### isArray
+`true` or `false`. (DEFALT:`null` - Don't care)  
+when `true`, The value of parameter in request must be an Array or stringified Array.  
+when `false `, The value of parameter in request must NOT be an Array or stringified Array.  
+
+Example:
+
+```javascript
+option = {
+  query: {
+    param1: {
+      isArray: true
+    }
+  }
+}
+```
+
+#### isIntegerArray
+`true` or `false`. (DEFALT:`null` - Don't care)  
+when `true`, The value of parameter in request must be an Array or stringified Array whose elements are all integers.  
+when `false `, The value of parameter in request must NOT be an Array or stringified Array whose elements are all integers.  
+
+Example:
+
+```javascript
+option = {
+  query: {
+    param1: {
+      isIntegerArray: true
     }
   }
 }

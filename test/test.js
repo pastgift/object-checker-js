@@ -440,6 +440,121 @@ describe('main', function() {
 
 
 
+
+
+
+    it('F-9 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isArray:true), Got 1 email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isArray: true }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '["a", "b"]'
+      };
+      assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-10 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isArray:true), Got 1 non-email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isArray: true }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '{"a": "b"}'
+      };
+      assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-11 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isArray:false), Got 1 email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isArray: false }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '["a", "b"]'
+      };
+      assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-12 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isArray:false), Got 1 non-email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isArray: false }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '{"a": "b"}'
+      };
+      assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+
+
+
+
+    it('F-13 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isIntegerArray:true), Got 1 email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isIntegerArray: true }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '[1, 2]'
+      };
+      assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-14 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isIntegerArray:true), Got 1 non-email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isIntegerArray: true }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '["a", "b"]'
+      };
+      assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-15 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isIntegerArray:false), Got 1 email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isIntegerArray: false }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '[1, 2]'
+      };
+      assert.equal(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+    it('F-16 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(isIntegerArray:false), Got 1 non-email ' + scopeName + ' input', function() {
+      options = {};
+      options[scopeName] = {
+        param1: { isIntegerArray: false }
+      };
+      fakeReq = {};
+      fakeReq[scopeName] = {
+        param1: '["a", "b"]'
+      };
+      assert.notEqual(false, reqChecker(options)(fakeReq, fakeRes, fakeNext));
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
     it('G-1 scope: ' + scopeName + ', strict: default -> 1 ' + scopeName + ' required(equal), Got 1 valid ' + scopeName + ' input', function() {
       options = {};
       options[scopeName] = {
