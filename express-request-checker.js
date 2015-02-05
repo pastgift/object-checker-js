@@ -1,14 +1,11 @@
 'use strict'
 
-/* Module Settings */
-var errorHttpStatusCode = 400;
-var sendErrorDetailFlag = false;
-
+/* Module Default Settings */
+var defaultHttpStatusErrorCode = 400;
 var defaultHeaders = {
   "Content-Type": "application/json"
 };
-
-var defaultFormat = JSON.stringify(
+var defaultHttpResponseBodyErrorFormat = JSON.stringify(
   {
     error: {
       reporter    : "express-request-checker",
@@ -19,10 +16,9 @@ var defaultFormat = JSON.stringify(
     }
   }
 );
-
-var errorHttpResponseHeaders = defaultHeaders;
-var errorHttpResponseBodyFormat = defaultFormat;
-
+var defaultMissingFieldErrorMessage    = 'Missing field.';
+var defaultUnexpectedFieldErrorMessage = 'Unexpected field.';
+var defaultInvalidFieldValueMessage    = 'Invalid value: `{{value}}`';
 var defaultFieldOptions = {
   isOptional: false,
   allowEmpty: false
@@ -31,6 +27,15 @@ var defaultFieldOptions = {
 var defaultGlobalOptions = {
   strict: true
 };
+
+/* Module Settings */
+var sendErrorDetailFlag         = false;
+var httpStatusErrorCode         = defaultHttpStatusErrorCode;
+var httpResponseErrorHeaders    = defaultHeaders;
+var httpResponseBodyErrorFormat = defaultHttpResponseBodyErrorFormat;
+var missingFieldErrorMessage    = defaultMissingFieldErrorMessage;
+var unexpectedFieldErrorMessage = defaultUnexpectedFieldErrorMessage;
+var invalidFieldValueMessage    = defaultInvalidFieldValueMessage;
 
 /* Useful functions */
 var isSetted = function(obj) {
@@ -47,30 +52,32 @@ var isInteger = function(v) {
 };
 
 /* Check result handling */
-var invalidValueErrorMessage = function(v) {
-  return 'Invalid value: `' + v + '`';
+var getInvalidValueErrorMessage = function(v) {
+  var msg = invalidFieldValueMessage;
+  msg = msg.replace(/\{\{value\}\}/g, v);
+  return msg;
 };
 
 var sendError = function(res, scope, field, errorMessage, errorDetail) {
-  var response = errorHttpResponseBodyFormat;
-  response = response.replace('{{scope}}',        scope,        'g');
-  response = response.replace('{{field}}',        field,        'g');
-  response = response.replace('{{errorMessage}}', errorMessage, 'g');
+  var response = httpResponseBodyErrorFormat;
+  response = response.replace(/\{\{scope\}\}/g, scope);
+  response = response.replace(/\{\{field\}\}/g, field);
+  response = response.replace(/\{\{errorMessage\}\}/g, errorMessage);
 
   if (sendErrorDetailFlag && isSetted(errorDetail)) {
-    response = response.replace('{{errorDetail}}', errorDetail, 'g');
+    response = response.replace(/\{\{errorDetail\}\}/, errorDetail);
   }
   else {
-    response = response.replace('{{errorDetail}}', '');
+    response = response.replace(/\{\{errorDetail\}\}/g, '');
   }
 
-  var httpStatus = errorHttpStatusCode;
+  var httpStatus = httpStatusErrorCode;
   if (!isInteger(httpStatus)) {
     httpStatus = 400;
   }
 
-  for (var headerKey in errorHttpResponseHeaders) {
-    var headerValue = errorHttpResponseHeaders[headerKey];
+  for (var headerKey in httpResponseErrorHeaders) {
+    var headerValue = httpResponseErrorHeaders[headerKey];
     res.set(headerKey, headerValue);
   }
   res.status(httpStatus);
@@ -253,6 +260,7 @@ var checkerList = {
   }
 }
 
+/* Main */
 var _checkScope = function(scope, scopeCheckOption) {
   var checkResult = {
     OK: true,
@@ -276,7 +284,7 @@ var _checkScope = function(scope, scopeCheckOption) {
     checkResult.field = fieldName;
     if (!isSetted(scope[fieldName])) {
       checkResult.OK           = false;
-      checkResult.errorMessage = 'Missing field.';
+      checkResult.errorMessage = missingFieldErrorMessage;
       checkResult.errorDetail  = '';
       return checkResult;
     }
@@ -291,7 +299,7 @@ var _checkScope = function(scope, scopeCheckOption) {
       if (checker(v, option) === true) { continue; }
 
       checkResult.OK           = false;
-      checkResult.errorMessage = invalidValueErrorMessage(v);
+      checkResult.errorMessage = getInvalidValueErrorMessage(v);
       checkResult.errorDetail  = checkerName + ': `' + option + '`';
       return checkResult;
     }
@@ -300,7 +308,6 @@ var _checkScope = function(scope, scopeCheckOption) {
   return checkResult;
 };
 
-/* Main */
 var requestChecker = function(reqCheckOption) {
   var checkerMiddleware = function(req, res, next) {
     // Replace `undefined` scope to `{}`
@@ -333,7 +340,7 @@ var requestChecker = function(reqCheckOption) {
             res,
             scopeName,
             fieldName,
-            'Unexpected field',
+            unexpectedFieldErrorMessage,
             'Strict check is ON.'
           );
           return false;
@@ -369,24 +376,36 @@ module.exports.SEND_ERROR_DETAIL = function(enabled) {
   sendErrorDetailFlag = enabled;
 };
 
-module.exports.setErrorHttpStatusCode = function(code) {
-  errorHttpStatusCode = code;
+module.exports.setHttpStatusErrorCode = function(code) {
+  httpStatusErrorCode = code;
 };
 
-module.exports.setErrorHttpResponseHeaders = function(headers) {
-  errorHttpResponseHeaders = headers;
+module.exports.setHttpResponseErrorHeaders = function(headers) {
+  httpResponseErrorHeaders = headers;
 };
 
-module.exports.setErrorHttpResponseBodyFormat = function(format) {
-  errorHttpResponseBodyFormat = format;
+module.exports.setHttpResponseBodyErrorFormat = function(format) {
+  httpResponseBodyErrorFormat = format;
+};
+
+module.exports.setMissingFieldErrorMessage = function(format) {
+  missingFieldErrorMessage = format;
+};
+
+module.exports.setUnexpectedFieldErrorMessage = function(format) {
+  unexpectedFieldErrorMessage = format;
+};
+
+module.exports.setInvalidFieldValueMessage = function(format) {
+  invalidFieldValueMessage = format;
 };
 
 module.exports.setDefaultFieldOptions = function(options) {
   defaultFieldOptions = options;
-}
+};
 
 module.exports.setDefaultGlobalOptions = function(options) {
   defaultGlobalOptions = options;
-}
+};
 
 module.exports.requestChecker = requestChecker;
