@@ -113,6 +113,23 @@ var _compare = function(x, y, method) {
   }
 };
 
+var _isArrayOrArrayString = function(v) {
+  var obj;
+  if (typeof v === 'string') {
+    try {
+      obj = JSON.parse(v);
+    }
+    catch (err) {
+      return false;
+    }
+  }
+  else {
+    obj = v
+  }
+
+  return Array.isArray(obj);
+};
+
 var checkerList = {
   assertTrue : function(v, func) {
     return _assertChecker(v, func, true);
@@ -181,6 +198,25 @@ var checkerList = {
 
     var reEmail = /^(?:[a-z\d]+[_\-\+\.]?)*[a-z\d]+@(?:([a-z\d]+\-?)*[a-z\d]+\.)+([a-z]{2,})+$/i;
     return !(flg ^ reEmail.test(v));
+  },
+
+  isArray : function(v, flg) {
+    if (typeof flg !== 'boolean') { return true; }
+
+    return !(flg ^ _isArrayOrArrayString(v));
+  },
+  
+  isIntegerArray : function(v, flg) {
+    if (typeof flg !== 'boolean') { return true; }
+
+    if (!_isArrayOrArrayString(v)) { return !(flg ^ false); }
+
+    var arr = JSON.parse(v);
+    for (var i = 0; i < arr.length; i++) {
+      if (!isInteger(arr[i])) { return !(flg ^ false); }
+    }
+
+    return !(flg ^ true);
   },
 
   equal : function(v, optionValue) {
