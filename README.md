@@ -1,4 +1,4 @@
-# express-request-checker
+# object-checker
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
 

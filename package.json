@@ -1,6 +1,6 @@
 {
   "name": "object-checker",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "A tool for checking object. (also provide a middleware for express)",
   "main": "object-checker.js",
   "devDependencies": {
@@ -19,7 +19,8 @@
     "checker",
     "validation",
     "validator",
-    "middleware"
+    "middleware",
+    "express"
   ],
   "author": {
     "name": "Yiling Zhou",
