@@ -71,7 +71,6 @@ var _checkers = {
 }
 
 var _isValid = function(obj, options) {
-  console.log('>>>', obj, options);
   if ((options.$isOptional == true) && (typeof obj == 'undefined')) {
     return;
   }
