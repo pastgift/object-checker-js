@@ -129,7 +129,7 @@ exports.checkObject = function(obj, options) {
 };
 
 exports.bodyCheckMiddleware = function(options) {
-  middleware = function(req, res, next) {
+  var middleware = function(req, res, next) {
     var checkTarget = req.body;
     var checkOptions = options;
     try {
