@@ -76,20 +76,36 @@ var _checkers = {
   }
 }
 
-exports.errorHandler = function(err, req, res, next) {
-  res.send(err.message);
+exports.messageTemplate = {
+  invalid: "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
+  unexpected: "Found unexpected field `{{fieldName}}`"
 };
 
-exports.invalidMessage = "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})"
-exports.unexpectedMessage = "Found unexpected field `{{fieldName}}`"
+exports.createErrorMessage = function(e, messageTemplate) {
+  var errorMessage = messageTemplate[e.type];
+  errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  e.fieldName);
+  
+  if (e.type == 'invalid') {
+    errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(e.fieldValue));
+    errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, e.checkerName.slice(1));
+    errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, e.checkerOption);
+  }
+  return errorMessage;
+};
+
+exports.errorHandler = function(err, req, res, next) {
+  var message = exports.createErrorMessage(err, exports.template);
+  res.send(message);
+};
 
 var _isValid = function(objName, obj, options) {
   if (typeof obj == 'object' && typeof obj != 'undefined' && obj != null) {
     for (var objKey in obj) {
       if (!(objKey in options)) {
-        var errorMessage = exports.unexpectedMessage;
-        errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  objKey);
-        throw new Error(errorMessage);
+        var e = new Error();
+        e.type = 'unexpected';
+        e.fieldName = objKey;
+        throw e;
       }
     }
   }
@@ -104,13 +120,13 @@ var _isValid = function(objName, obj, options) {
     if (optionKey in _checkers) {
       var checkResult = _checkers[optionKey](obj, option);
       if (checkResult == false) {
-        var errorMessage = exports.invalidMessage;
-        errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  objName);
-        errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(obj));
-        errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, optionKey.slice(1));
-        errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, option);
-        console.log(errorMessage);
-        throw new Error(errorMessage);
+        var e = new Error();
+        e.type = 'invalid';
+        e.fieldName = objName;
+        e.fieldValue = obj;
+        e.checkerName = optionKey;
+        e.checkerOption = option;
+        throw e
       }
     } else {
       if (optionKey == '$isOptional') {
@@ -131,7 +147,7 @@ exports.isValidObject = function(obj, options) {
   try {
     _isValid('obj', obj, options);
   } catch (error) {
-    console.log('error:', error.message);
+    console.log('error:', exports.createErrorMessage(error, exports.messageTemplate));
     return false;
   }
   return true;
@@ -147,7 +163,7 @@ exports.checkObject = function(obj, options) {
     _isValid('obj', obj, options);
   } catch (error) {
     ret.isValid = false;
-    ret.message = error.message;
+    ret.message = exports.createErrorMessage(error, exports.messageTemplate);
   }
   return ret;
 };
