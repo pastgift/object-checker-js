@@ -80,9 +80,20 @@ exports.errorHandler = function(err, req, res, next) {
   res.send(err.message);
 };
 
-exports.messageTemplate = "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})"
+exports.invalidMessage = "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})"
+exports.unexpectedMessage = "Found unexpected field `{{fieldName}}`"
 
 var _isValid = function(objName, obj, options) {
+  if (typeof obj == 'object' && typeof obj != 'undefined' && obj != null) {
+    for (var objKey in obj) {
+      if (!(objKey in options)) {
+        var errorMessage = exports.unexpectedMessage;
+        errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  objKey);
+        throw new Error(errorMessage);
+      }
+    }
+  }
+  
   if ((options.$isOptional == true) && (typeof obj == 'undefined')) {
     return;
   }
@@ -93,7 +104,7 @@ var _isValid = function(objName, obj, options) {
     if (optionKey in _checkers) {
       var checkResult = _checkers[optionKey](obj, option);
       if (checkResult == false) {
-        var errorMessage = exports.messageTemplate;
+        var errorMessage = exports.invalidMessage;
         errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  objName);
         errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(obj));
         errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, optionKey.slice(1));

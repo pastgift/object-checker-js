@@ -173,8 +173,12 @@ module.exports = router;
 ### Custom error message and error handler in middleware
 ```javascript
 var objectChecker = require('../object-checker');
+
 var customMsg = "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}";
-objectChecker.messageTemplate = customMsg;
+var customUnexpected = "Not support {{fieldName}}";
+
+objectChecker.invalidMessage = customMsg;
+objectChecker.unexpectedMessage = customUnexpected;
 ```
 
 ```javascript
