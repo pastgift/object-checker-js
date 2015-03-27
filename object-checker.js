@@ -67,10 +67,22 @@ var _checkers = {
   $isEmail: function(v, flg) {
     var reEmail = /^(?:[a-z\d]+[_\-\+\.]?)*[a-z\d]+@(?:([a-z\d]+\-?)*[a-z\d]+\.)+([a-z]{2,})+$/i;
     return flg == reEmail.test(v);
+  },
+  $matchRegExp: function(v, regExp) {
+    return regExp.test(v);
+  },
+  $notMatchRegExp: function(v, regExp) {
+    return !regExp.test(v);
   }
 }
 
-var _isValid = function(obj, options) {
+exports.errorHandler = function(err, req, res, next) {
+  res.send(err.message);
+};
+
+exports.messageTemplate = "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})"
+
+var _isValid = function(objName, obj, options) {
   if ((options.$isOptional == true) && (typeof obj == 'undefined')) {
     return;
   }
@@ -81,9 +93,11 @@ var _isValid = function(obj, options) {
     if (optionKey in _checkers) {
       var checkResult = _checkers[optionKey](obj, option);
       if (checkResult == false) {
-        var errorMessage = "";
-        errorMessage += "Param value `" + JSON.stringify(obj) + "` is not valid. ";
-        errorMessage += "(" + optionKey.slice(1) + " = " + option + ")";
+        var errorMessage = exports.messageTemplate;
+        errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  objName);
+        errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(obj));
+        errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, optionKey.slice(1));
+        errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, option);
         console.log(errorMessage);
         throw new Error(errorMessage);
       }
@@ -93,10 +107,10 @@ var _isValid = function(obj, options) {
       } else if (optionKey == '$') {
         for (var i in obj) {
           var element = obj[i];
-          _isValid(element, option);
+          _isValid(objName + '[' + i + ']', element, option);
         }
       } else {
-        _isValid(obj[optionKey], option);
+        _isValid(optionKey, obj[optionKey], option);
       }
     }
   }
@@ -104,7 +118,7 @@ var _isValid = function(obj, options) {
 
 exports.isValidObject = function(obj, options) {
   try {
-    _isValid(obj, options);
+    _isValid('obj', obj, options);
   } catch (error) {
     console.log('error:', error.message);
     return false;
@@ -119,7 +133,7 @@ exports.checkObject = function(obj, options) {
   }
 
   try {
-    _isValid(obj, options);
+    _isValid('obj', obj, options);
   } catch (error) {
     ret.isValid = false;
     ret.message = error.message;
@@ -132,9 +146,9 @@ exports.bodyCheckMiddleware = function(options) {
     var checkTarget = req.body;
     var checkOptions = options;
     try {
-      _isValid(checkTarget, checkOptions);
+      _isValid('req.body', checkTarget, checkOptions);
     } catch (error) {
-      res.send(error.message);
+      exports.errorHandler(error, req, res, next);
       return;
     }
     next();

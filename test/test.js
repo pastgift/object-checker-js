@@ -2,10 +2,13 @@ var assert = require('assert');
 var objectChecker = require('../object-checker');
 
 describe('main', function() {
+  objectChecker.messageTemplate = "字段`{{fieldName}}`无效。值：`{{fieldValue}}`，不满足：{{checkerName}} = {{checkerOption}}。"
+
   /* Complicated objects */
   var complicatedValidObj = {
     users: [
       {
+        id: 1,
         name:"a@a.com",
         additional:{
           age: 20,
@@ -14,9 +17,11 @@ describe('main', function() {
         }
       },
       {
+        id: 2,
         name:"123@b.com"
       },
       {
+        id: 3,
         name:"123@a.com",
         additional: {
           age: 100,
@@ -30,6 +35,7 @@ describe('main', function() {
   var complicatedInValidObj = {
     users: [
       {
+        id: 'a1',
         name:"a@a.com",
         additional:{
           age: 20,
@@ -38,9 +44,11 @@ describe('main', function() {
         }
       },
       {
+        id: 2,
         name:"123@b.com"
       },
       {
+        id: 3,
         name:"123@a.com",
         additional: {
           age: 500,
@@ -55,6 +63,9 @@ describe('main', function() {
     users: {
       $maxLength: 5,
       $: {
+        id: {
+          $matchRegExp: /^\d$/,
+        },
         name: {
           $isEmail: true,
           $minLength: 6,
@@ -364,6 +375,42 @@ describe('main', function() {
     };
     var obj = {
       foo: 'xxx'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - invalid object ' + i++, function() {
+    var opt = {
+      foo: {
+        $matchRegExp: /^[12]$/
+      }
+    };
+    var obj = {
+      foo: '3'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - invalid object ' + i++, function() {
+    var opt = {
+      foo: {
+        $notMatchRegExp: /^[12]$/
+      }
+    };
+    var obj = {
+      foo: '1'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - invalid object ' + i++, function() {
+    var opt = {
+      foo: {
+        $isInteger: true
+      }
+    };
+    var obj = {
+      bar: 2
     };
     assert.equal(false,  objectChecker.isValidObject(obj, opt));
   });

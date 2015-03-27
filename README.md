@@ -170,6 +170,24 @@ router.post('/users', bodyCheckMiddleware(opt), handlerFunction);
 module.exports = router;
 ```
 
+### Custom error message and error handler in middleware
+```javascript
+var objectChecker = require('../object-checker');
+var customMsg = "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}";
+objectChecker.messageTemplate = customMsg;
+```
+
+```javascript
+var objectChecker = require('../object-checker');
+objectChecker.errorHandler = function(err, req, res, next) {
+  console.log(err);
+  res.send({
+    err: 400,
+    msg: err.message
+  });
+};
+```
+
 ### Option list
 
 - $:
@@ -210,6 +228,10 @@ module.exports = router;
   - Length of value should be `option`.
 - $isEmail: true
   - Should be email.
+- $matchRegExp: `RegExp`.
+  - Should match `RegExp`.
+- $notMatchRegExp: `RegExp`.
+  - Should not match `RegExp`.
 
 ### Install:
 ```shell
