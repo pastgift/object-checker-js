@@ -78,6 +78,7 @@ var _checkers = {
 
 exports.messageTemplate = {
   invalid: "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
+  missing: "Field `{{fieldName}}` is missing.",
   unexpected: "Found unexpected field `{{fieldName}}`"
 };
 
@@ -101,7 +102,7 @@ exports.errorHandler = function(err, req, res, next) {
 var _isValid = function(objName, obj, options) {
   if (typeof obj == 'object' && typeof obj != 'undefined' && obj != null) {
     for (var objKey in obj) {
-      if (!(objKey in options)) {
+      if (!(objKey in options) && !/^\d+$/.test(objKey)) {
         var e = new Error();
         e.type = 'unexpected';
         e.fieldName = objKey;
@@ -112,6 +113,13 @@ var _isValid = function(objName, obj, options) {
   
   if ((options.$isOptional == true) && (typeof obj == 'undefined')) {
     return;
+  }
+
+  if (typeof obj == 'undefined') {
+    var e = new Error();
+    e.type = 'missing';
+    e.fieldName = objName;
+    throw e;
   }
 
   for (var optionKey in options) {

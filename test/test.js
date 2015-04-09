@@ -2,7 +2,11 @@ var assert = require('assert');
 var objectChecker = require('../object-checker');
 
 describe('main', function() {
-  objectChecker.messageTemplate = "字段`{{fieldName}}`无效。值：`{{fieldValue}}`，不满足：{{checkerName}} = {{checkerOption}}。"
+objectChecker.messageTemplate = {
+  "invalid": "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+  "missing": "Missing {{fieldName}}",
+  "unexpected": "Not support {{fieldName}}"
+};
 
   /* Complicated objects */
   var complicatedValidObj = {

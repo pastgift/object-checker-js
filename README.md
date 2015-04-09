@@ -175,6 +175,7 @@ module.exports = router;
 var objectChecker = require('../object-checker');
 objectChecker.messageTemplate = {
   "invalid": "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+  "missing": "Missing {{fieldName}}",
   "unexpected": "Not support {{fieldName}}"
 };
 ```
@@ -185,6 +186,7 @@ objectChecker.errorHandler = function(err, req, res, next) {
   console.log(err);
   var template = {
     "invalid": "invalid request",
+    "missing": "missing parameter",
     "unexpected": "found unexpected parameter"
   };
   res.send({
