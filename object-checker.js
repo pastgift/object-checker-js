@@ -8,7 +8,10 @@ var _checkers = {
     return func(v) == false;
   },
   $notEmptyString: function(v, flg) {
-    return flg == ((v + "").length > 0);
+    if (typeof v != 'string') {
+      return false;
+    }
+    return flg == (v.length > 0);
   },
   $isInteger: function(v, flg) {
     var reInteger = /^-?\d+$/;
@@ -31,9 +34,15 @@ var _checkers = {
     return flg == reNegativeInteger.test(v);
   },
   $minValue: function(v, minValue) {
+    if (typeof v != 'number') {
+      return false;
+    }
     return v >= minValue;
   },
   $maxValue: function(v, maxValue) {
+    if (typeof v != 'number') {
+      return false;
+    }
     return v <= maxValue;
   },
   $isValue: function(v, value) {
@@ -56,12 +65,21 @@ var _checkers = {
     return true;
   },
   $minLength: function(v, minLength) {
+    if (typeof v != 'string') {
+      return false;
+    }
     return v.length >= minLength;
   },
   $maxLength: function(v, maxLength) {
+    if (typeof v != 'string') {
+      return false;
+    }
     return v.length <= maxLength;
   },
   $isLength: function(v, length) {
+    if (typeof v != 'string') {
+      return false;
+    }
     return v.length == length;
   },
   $isEmail: function(v, flg) {
@@ -84,7 +102,11 @@ exports.messageTemplate = {
 
 exports.createErrorMessage = function(e, messageTemplate) {
   var errorMessage = messageTemplate[e.type];
-  errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  e.fieldName);
+  if (errorMessage) {
+    errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  e.fieldName);
+  } else {
+    errorMessage = e.toString();
+  }
   
   if (e.type == 'invalid') {
     errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(e.fieldValue));
