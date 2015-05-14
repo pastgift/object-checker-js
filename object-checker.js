@@ -65,19 +65,19 @@ var _checkers = {
     return true;
   },
   $minLength: function(v, minLength) {
-    if (typeof v != 'string') {
+    if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length >= minLength;
   },
   $maxLength: function(v, maxLength) {
-    if (typeof v != 'string') {
+    if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length <= maxLength;
   },
   $isLength: function(v, length) {
-    if (typeof v != 'string') {
+    if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length == length;
