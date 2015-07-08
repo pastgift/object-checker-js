@@ -1,6 +1,6 @@
 {
-  "name": "object-checker",
-  "version": "0.3.11",
+  "name": "object-checker-js",
+  "version": "0.3.12",
   "description": "A tool for checking object. (also provide a middleware for express)",
   "main": "object-checker.js",
   "devDependencies": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pastgift/object-checker.git"
+    "url": "https://github.com/pastgift/object-checker-js.git"
   },
   "keywords": [
     "object",
@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pastgift/object-checker/issues"
+    "url": "https://github.com/pastgift/object-checker-js/issues"
   },
-  "homepage": "https://github.com/pastgift/object-checker"
+  "homepage": "https://github.com/pastgift/object-checker-js"
 }
