@@ -210,11 +210,13 @@ objectChecker.errorHandler = function(err, req, res, next) {
   - Should be `''`.
 - $isInteger: ture
   - Should be an integer.
-- $isPositiveZeroInteger: true
+- $isPositiveZeroInteger: Renamed to `isPositiveIntegerOrZero`
+- $isPositiveIntegerOrZero: true
   - Should be an positive integer or `0`.
 - $isPositiveInteger: ture
   - Should be an positive integer.
-- $isNegativeZeroInteger: ture
+- $isNegativeZeroInteger: Renamed to `isNegativeIntegerOrZero`
+- $isNegativeIntegerOrZero: ture
   - Should be an negative integer or `0`.
 - $isNegativeInteger: true
   - Should be an negative integer.

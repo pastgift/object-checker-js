@@ -1,11 +1,10 @@
 {
   "name": "object-checker",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "A tool for checking object. (also provide a middleware for express)",
   "main": "object-checker.js",
   "devDependencies": {
-    "mocha": "2.0.1",
-    "validator": "^3.28.0"
+    "mocha": "2.0.1"
   },
   "scripts": {
     "test": "mocha"
@@ -30,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/pastgift/object-checker-js/issues"
   },
-  "homepage": "https://github.com/pastgift/object-checker-js"
+  "homepage": "https://github.com/pastgift/object-checker-js",
+  "dependencies": {
+    "validator": "^4.2.1"
+  }
 }

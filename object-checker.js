@@ -1,18 +1,26 @@
 'use strict'
 
+var validator = require('validator')
+
+var _assertTrue = function(v, func) {
+  return func(v) == true;
+};
+
+var _assertFalse = function(v, func) {
+  return func(v) == false;
+};
+
+var _notEmptyString = function(v, flg) {
+  if (typeof v != 'string') {
+    return false;
+  }
+  return flg == (v.length > 0);
+};
+
 var _checkers = {
-  $assertTrue: function(v, func) {
-    return func(v) == true;
-  },
-  $assertFalse: function(v, func) {
-    return func(v) == false;
-  },
-  $notEmptyString: function(v, flg) {
-    if (typeof v != 'string') {
-      return false;
-    }
-    return flg == (v.length > 0);
-  },
+  $assertTrue: _assertTrue,
+  $assertFalse: _assertFalse,
+  $notEmptyString: _notEmptyString,
   $isInteger: function(v, flg) {
     var reInteger = /^-?\d+$/;
     return flg == reInteger.test(v);
@@ -21,11 +29,19 @@ var _checkers = {
     var rePositiveZeroInteger = /^\d+$/;
     return flg == rePositiveZeroInteger.test(v);
   },
+  $isPositiveIntegerOrZero: function(v, flg) {
+    var rePositiveZeroInteger = /^\d+$/;
+    return flg == rePositiveZeroInteger.test(v);
+  },
   $isPositiveInteger: function(v, flg) {
     var rePositiveInteger = /^[0-9]*[1-9][0-9]*$/;
     return flg == rePositiveInteger.test(v);
   },
   $isNegativeZeroInteger: function(v, flg) {
+    var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
+    return flg == reNegativeZeroInteger.test(v);
+  },
+  $isNegativeIntegerOrZero: function(v, flg) {
     var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
     return flg == reNegativeZeroInteger.test(v);
   },
@@ -83,8 +99,7 @@ var _checkers = {
     return v.length == length;
   },
   $isEmail: function(v, flg) {
-    var reEmail = /^(?:[a-z\d]+[_\-\+\.]?)*[a-z\d]+@(?:([a-z\d]+\-?)*[a-z\d]+\.)+([a-z]{2,})+$/i;
-    return flg == reEmail.test(v);
+    return flg == validator.isEmail(v);
   },
   $matchRegExp: function(v, regExp) {
     return regExp.test(v);
@@ -107,7 +122,7 @@ exports.createErrorMessage = function(e, messageTemplate) {
   } else {
     errorMessage = e.toString();
   }
-  
+
   if (e.type == 'invalid') {
     errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(e.fieldValue));
     errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, e.checkerName.slice(1));
@@ -132,7 +147,7 @@ var _isValid = function(objName, obj, options) {
       }
     }
   }
-  
+
   if ((options.$isOptional == true) && (typeof obj == 'undefined')) {
     return;
   }
