@@ -192,7 +192,7 @@ var _isValid = function(objName, obj, options) {
         e.fieldName = objName;
         e.fieldValue = obj;
         e.checkerName = optionKey;
-        e.checkerOption = option;
+        e.checkerOption = JSON.stringify(option);
         throw e
       }
     } else {

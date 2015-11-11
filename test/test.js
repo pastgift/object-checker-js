@@ -463,14 +463,14 @@ objectChecker.messageTemplate = {
       foo: {
         $validator$isURL: {
           assert: true,
-          options: {protocols: ['http','https']}
+          options: {protocols: ['http','https'], require_protocol: true}
         }
       }
     };
     var obj = {
       foo: 'www.google.com'
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
   });
 
   it('Test Checker - with validator ' + i++, function() {
