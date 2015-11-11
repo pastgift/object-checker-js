@@ -457,4 +457,35 @@ objectChecker.messageTemplate = {
     };
     assert.equal(false,  objectChecker.isValidObject(obj, opt));
   });
+
+  it('Test Checker - with validator ' + i++, function() {
+    var opt = {
+      foo: {
+        $validator$isURL: {
+          assert: true,
+          options: {protocols: ['http','https']}
+        }
+      }
+    };
+    var obj = {
+      foo: 'www.google.com'
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - with validator ' + i++, function() {
+    var opt = {
+      foo: {
+        $validator$isURL: {
+          assert: true,
+          options: {protocols: ['http','https']}
+        }
+      }
+    };
+    var obj = {
+      foo: 'http://www.google.com'
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
 });

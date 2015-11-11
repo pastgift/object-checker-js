@@ -1,6 +1,7 @@
 'use strict'
 
-var validator = require('validator')
+var validator = require('validator');
+var VALIDATOR_CHECKER = '$validator$';
 
 var _assertTrue = function(v, func) {
   return func(v) == true;
@@ -169,6 +170,23 @@ var _isValid = function(objName, obj, options) {
     if (optionKey in _checkers) {
       var checkResult = _checkers[optionKey](obj, option);
       if (checkResult == false) {
+        var e = new Error();
+        e.type = 'invalid';
+        e.fieldName = objName;
+        e.fieldValue = obj;
+        e.checkerName = optionKey;
+        e.checkerOption = option;
+        throw e
+      }
+    } else if (optionKey.slice(0, VALIDATOR_CHECKER.length) == VALIDATOR_CHECKER) {
+      var validatorFuncName = optionKey.slice(VALIDATOR_CHECKER.length);
+      var validatorAssert   = option.assert  || true;
+      var validatorOptions  = option.options || [];
+      if (!Array.isArray(validatorOptions)) {
+        validatorOptions = [validatorOptions];
+      }
+      var checkResult = validator[validatorFuncName].apply(validator, [obj].concat(validatorOptions));
+      if (checkResult != validatorAssert) {
         var e = new Error();
         e.type = 'invalid';
         e.fieldName = objName;
