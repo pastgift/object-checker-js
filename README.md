@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
 
-A tool for checking object. And also provide a middleware for express.  
+A tool for checking object. And also provide a middleware for express.
 
 - No validation codes.
 - Easy to combine with other validation package.
@@ -92,7 +92,7 @@ obj =
       name:"123@a.com"
       additional:
         age: 500
-        height:300 
+        height:300
         score: [30]
     }
   ]
@@ -202,6 +202,8 @@ objectChecker.errorHandler = function(err, req, res, next) {
   - Iterate all elements in array.
 - $isOptional: true
   - Can be `undefined`.
+- $allowNull: true
+  - Can be `null`.
 - $assertTrue: `assertFunction`
   - `assertFunction(value)` should return `true`.
 - $assertFalse: `assertFunction`
@@ -222,19 +224,19 @@ objectChecker.errorHandler = function(err, req, res, next) {
   - Should be an negative integer.
 - $minValue: `option`
   - Min value should be `option`.
-- $maxValue: `option`  
+- $maxValue: `option`
   - Max value should be `option`.
-- $isValue: `option`               
+- $isValue: `option`
   - Should be `option`
 - $in: [`option1`, `option2`, ...]
   - Value should be in the array.
 - $notIn: [`option1`, `option2`, ...]
   - Value should not be in the array.
-- $minLength             
+- $minLength
   - Min length of value should be `option`.
-- $maxLength             
+- $maxLength
   - Max length of value should be `option`.
-- $isLength: `option`     
+- $isLength: `option`
   - Length of value should be `option`.
 - $isEmail: true
   - Should be email.

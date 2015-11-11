@@ -152,6 +152,10 @@ var _isValid = function(objName, obj, options) {
     return;
   }
 
+  if ((options.$allowNull == true) && (obj === null)) {
+    return;
+  }
+
   if (typeof obj == 'undefined') {
     var e = new Error();
     e.type = 'missing';
@@ -175,6 +179,8 @@ var _isValid = function(objName, obj, options) {
       }
     } else {
       if (optionKey == '$isOptional') {
+        // no op
+      } else if (optionKey == '$allowNull') {
         // no op
       } else if (optionKey == '$') {
         for (var i in obj) {

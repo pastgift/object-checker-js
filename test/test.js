@@ -418,4 +418,43 @@ objectChecker.messageTemplate = {
     };
     assert.equal(false,  objectChecker.isValidObject(obj, opt));
   });
+
+  it('Test Checker - null field ' + i++, function() {
+    var opt = {
+      foo: {
+        $allowNull: true,
+        $isInteger: true
+      }
+    };
+    var obj = {
+      foo: 2
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - null field ' + i++, function() {
+    var opt = {
+      foo: {
+        $allowNull: true,
+        $isInteger: true
+      }
+    };
+    var obj = {
+      foo: null
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - null field ' + i++, function() {
+    var opt = {
+      foo: {
+        $allowNull: true,
+        $isInteger: true
+      }
+    };
+    var obj = {
+      foo: 'abc'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
 });
