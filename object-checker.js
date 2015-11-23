@@ -138,6 +138,10 @@ exports.errorHandler = function(err, req, res, next) {
 };
 
 var _isValid = function(objName, obj, options) {
+  if (options.$skip == true) {
+    return;
+  }
+
   if (typeof obj == 'object' && typeof obj != 'undefined' && obj != null) {
     for (var objKey in obj) {
       if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {

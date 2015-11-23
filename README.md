@@ -198,6 +198,8 @@ objectChecker.errorHandler = function(err, req, res, next) {
 
 ### Option list
 
+- $skip:
+  - Do not check this field.
 - $:
   - Iterate all elements in array.
 - $isOptional: true

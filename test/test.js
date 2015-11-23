@@ -503,4 +503,19 @@ objectChecker.messageTemplate = {
     assert.equal(true,  objectChecker.isValidObject(obj, opt));
   });
 
+  it('Test Checker - Skip option ' + i++, function() {
+    var opt = {
+      foo: {
+        $skip: true
+      }
+    };
+    var obj = {
+      foo: {
+        bar: [1,2,3,4,5]
+      }
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+
 });
