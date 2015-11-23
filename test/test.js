@@ -488,4 +488,19 @@ objectChecker.messageTemplate = {
     assert.equal(true,  objectChecker.isValidObject(obj, opt));
   });
 
+  it('Additional Test - Additional member in Array ' + i++, function() {
+    var opt = {
+      foo: {
+        $: {
+          $isPositiveInteger: true
+        }
+      }
+    };
+    var obj = {
+      foo: [1,2,3,4,5]
+    };
+    obj.foo.xxx = 1;
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
 });

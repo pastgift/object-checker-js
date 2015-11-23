@@ -140,7 +140,7 @@ exports.errorHandler = function(err, req, res, next) {
 var _isValid = function(objName, obj, options) {
   if (typeof obj == 'object' && typeof obj != 'undefined' && obj != null) {
     for (var objKey in obj) {
-      if (!(objKey in options) && !/^\d+$/.test(objKey)) {
+      if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
         var e = new Error();
         e.type = 'unexpected';
         e.fieldName = objKey;
