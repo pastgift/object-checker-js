@@ -1,6 +1,6 @@
 {
   "name": "object-checker",
-  "version": "0.3.22",
+  "version": "0.3.23",
   "description": "A tool for checking object. (also provide a middleware for express)",
   "main": "object-checker.js",
   "devDependencies": {

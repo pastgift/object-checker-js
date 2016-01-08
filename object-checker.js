@@ -103,9 +103,15 @@ var _checkers = {
     return flg == validator.isEmail(v);
   },
   $matchRegExp: function(v, regExp) {
+    if ('string' == typeof(regExp)) {
+      regExp = new RegExp(regExp);
+    }
     return regExp.test(v);
   },
   $notMatchRegExp: function(v, regExp) {
+    if ('string' == typeof(regExp)) {
+      regExp = new RegExp(regExp);
+    }
     return !regExp.test(v);
   }
 }

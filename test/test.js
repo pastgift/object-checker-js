@@ -68,7 +68,7 @@ objectChecker.messageTemplate = {
       $maxLength: 5,
       $: {
         id: {
-          $matchRegExp: /^\d$/,
+          $matchRegExp: '^\\d$',
         },
         name: {
           $isEmail: true,
@@ -517,5 +517,27 @@ objectChecker.messageTemplate = {
     assert.equal(true,  objectChecker.isValidObject(obj, opt));
   });
 
+  it('Test Checker - RegExp in string ' + i++, function() {
+    var opt = {
+      foo: {
+        $matchRegExp: 'A[A-Z][0-9]'
+      }
+    };
+    var obj = {
+      foo: 'AB3'
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
 
+  it('Test Checker - RegExp in string ' + i++, function() {
+    var opt = {
+      foo: {
+        $matchRegExp: 'A[A-Z][0-9]'
+      }
+    };
+    var obj = {
+      foo: '123'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
 });
