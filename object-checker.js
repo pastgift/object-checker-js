@@ -139,7 +139,7 @@ exports.createErrorMessage = function(e, messageTemplate) {
 };
 
 exports.errorHandler = function(err, req, res, next) {
-  var message = exports.createErrorMessage(err, exports.template);
+  var message = exports.createErrorMessage(err, exports.messageTemplate);
   res.send(message);
 };
 
