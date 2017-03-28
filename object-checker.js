@@ -1,70 +1,103 @@
 'use strict'
 
 var validator = require('validator');
-var VALIDATOR_CHECKER = '$validator$';
 
-var _assertTrue = function(v, func) {
-  return func(v) == true;
-};
+var VALIDATOR_LABEL = '$validator$';
+var DIRECTIVES = {
+  // New directives
+  $type: function(v, t) {
+    switch (t.toLowerCase()) {
+      case 'string':
+        return 'string' === typeof v;
 
-var _assertFalse = function(v, func) {
-  return func(v) == false;
-};
+      case 'number':
+      case 'float':
+        return 'number' === typeof v;
 
-var _notEmptyString = function(v, flg) {
-  if (typeof v != 'string') {
-    return false;
-  }
-  return flg == (v.length > 0);
-};
+      case 'int':
+        var reInteger = /^-?\d+$/;
+        return 'number' === typeof v && reInteger.test(v);
 
-var _checkers = {
-  $assertTrue: _assertTrue,
-  $assertFalse: _assertFalse,
-  $notEmptyString: _notEmptyString,
+      case 'array':
+        return Array.isArray(v);
+
+      case 'json':
+        return 'object' === typeof v;
+
+      default:
+        return true;
+    }
+  },
+
+  // Directives before v0.3.24
+  $assertTrue: function(v, func) {
+    return func(v) == true;
+  },
+
+  $assertFalse: function(v, func) {
+    return func(v) == false;
+  },
+
+  $notEmptyString: function(v, flg) {
+    if (typeof v != 'string') {
+      return false;
+    }
+    return flg == (v.length > 0);
+  },
+
   $isInteger: function(v, flg) {
     var reInteger = /^-?\d+$/;
     return flg == reInteger.test(v);
   },
+
   $isPositiveZeroInteger: function(v, flg) {
     var rePositiveZeroInteger = /^\d+$/;
     return flg == rePositiveZeroInteger.test(v);
   },
+
   $isPositiveIntegerOrZero: function(v, flg) {
     var rePositiveZeroInteger = /^\d+$/;
     return flg == rePositiveZeroInteger.test(v);
   },
+
   $isPositiveInteger: function(v, flg) {
     var rePositiveInteger = /^[0-9]*[1-9][0-9]*$/;
     return flg == rePositiveInteger.test(v);
   },
+
   $isNegativeZeroInteger: function(v, flg) {
     var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
     return flg == reNegativeZeroInteger.test(v);
   },
+
   $isNegativeIntegerOrZero: function(v, flg) {
     var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
     return flg == reNegativeZeroInteger.test(v);
   },
+
   $isNegativeInteger: function(v, flg) {
     var reNegativeInteger = /^-[0-9]*[1-9][0-9]*$/;
     return flg == reNegativeInteger.test(v);
   },
+
   $minValue: function(v, minValue) {
     if (typeof v != 'number') {
       return false;
     }
     return v >= minValue;
   },
+
   $maxValue: function(v, maxValue) {
     if (typeof v != 'number') {
       return false;
     }
     return v <= maxValue;
   },
+
   $isValue: function(v, value) {
     return v == value;
   },
+
   $in: function(v, inRange) {
     for (var i in inRange) {
       if (inRange[i] == v) {
@@ -73,6 +106,7 @@ var _checkers = {
     }
     return false;
   },
+
   $notIn: function(v, inRange) {
     for (var i in inRange) {
       if (inRange[i] == v) {
@@ -81,47 +115,57 @@ var _checkers = {
     }
     return true;
   },
+
   $minLength: function(v, minLength) {
     if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length >= minLength;
   },
+
   $maxLength: function(v, maxLength) {
     if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length <= maxLength;
   },
+
   $isLength: function(v, length) {
     if ((typeof v != 'string') && (!Array.isArray(v))) {
       return false;
     }
     return v.length == length;
   },
+
   $isEmail: function(v, flg) {
     return flg == validator.isEmail(v);
   },
+
   $matchRegExp: function(v, regExp) {
     if ('string' == typeof(regExp)) {
       regExp = new RegExp(regExp);
     }
     return regExp.test(v);
   },
+
   $notMatchRegExp: function(v, regExp) {
     if ('string' == typeof(regExp)) {
       regExp = new RegExp(regExp);
     }
     return !regExp.test(v);
   }
-}
+};
 
+/* Configurable */
 exports.messageTemplate = {
   invalid: "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
   missing: "Field `{{fieldName}}` is missing.",
   unexpected: "Found unexpected field `{{fieldName}}`"
 };
 
+exports.customDirectives = {};
+
+/* Functional methods */
 exports.createErrorMessage = function(e, messageTemplate) {
   var errorMessage = messageTemplate[e.type];
   if (errorMessage) {
@@ -138,12 +182,69 @@ exports.createErrorMessage = function(e, messageTemplate) {
   return errorMessage;
 };
 
-exports.errorHandler = function(err, req, res, next) {
-  var message = exports.createErrorMessage(err, exports.messageTemplate);
-  res.send(message);
+exports.isValidObject = function(obj, options) {
+  try {
+    var checker = exports.createObjectChecker({
+      customDirectives: exports.customDirectives,
+      messageTemplate : exports.messageTemplate,
+    });
+    checker.isValid('obj', obj, options);
+  } catch (error) {
+    console.log('error:', exports.createErrorMessage(error, exports.messageTemplate));
+    return false;
+  }
+  return true;
 };
 
-var _isValid = function(objName, obj, options) {
+exports.checkObject = function(obj, options) {
+  var ret = {
+    isValid: true,
+    message: null
+  }
+
+  try {
+    var checker = exports.createObjectChecker({
+      customDirectives: exports.customDirectives,
+      messageTemplate : exports.messageTemplate,
+    });
+    checker.isValid('obj', obj, options);
+  } catch (error) {
+    ret.isValid = false;
+    ret.message = exports.createErrorMessage(error, exports.messageTemplate);
+  }
+  return ret;
+};
+
+exports.bodyCheckMiddleware = function(options) {
+  return function(req, res, next) {
+    var checkTarget = req.body;
+    var checkOptions = options;
+    try {
+      var checker = exports.createObjectChecker({
+        customDirectives: exports.customDirectives,
+        messageTemplate : exports.messageTemplate,
+      });
+      checker.isValid('req.body', checkTarget, checkOptions);
+    } catch (error) {
+      exports.errorHandler(error, req, res, next);
+      return;
+    }
+    next();
+  }
+};
+
+/**
+ * ObjectChecker
+ * @param {Object} options - ObjectCheck options
+ * @param {Object} [options.customDirectives]
+ * @param {Object} [options.messageTemplate]
+ */
+var ObjectChecker = function(options) {
+  this.customDirectives = options.customDirectives || exports.customDirectives;
+  this.messageTemplate  = options.messageTemplate  || exports.messageTemplate;
+};
+
+ObjectChecker.prototype.isValid = function(objName, obj, options) {
   if (options.$skip == true) {
     return;
   }
@@ -177,8 +278,13 @@ var _isValid = function(objName, obj, options) {
   for (var optionKey in options) {
     var option = options[optionKey];
 
-    if (optionKey in _checkers) {
-      var checkResult = _checkers[optionKey](obj, option);
+    if (optionKey in this.customDirectives || optionKey in DIRECTIVES) {
+      var checkFunc = this.customDirectives[optionKey]
+                  || DIRECTIVES[optionKey];
+
+      if (!checkFunc) continue;
+
+      var checkResult = checkFunc(obj, option);
       if (checkResult == false) {
         var e = new Error();
         e.type = 'invalid';
@@ -188,8 +294,8 @@ var _isValid = function(objName, obj, options) {
         e.checkerOption = option;
         throw e
       }
-    } else if (optionKey.slice(0, VALIDATOR_CHECKER.length) == VALIDATOR_CHECKER) {
-      var validatorFuncName = optionKey.slice(VALIDATOR_CHECKER.length);
+    } else if (optionKey.slice(0, VALIDATOR_LABEL.length) == VALIDATOR_LABEL) {
+      var validatorFuncName = optionKey.slice(VALIDATOR_LABEL.length);
       var validatorAssert   = option.assert  || true;
       var validatorOptions  = option.options || [];
       if (!Array.isArray(validatorOptions)) {
@@ -213,52 +319,61 @@ var _isValid = function(objName, obj, options) {
       } else if (optionKey == '$') {
         for (var i in obj) {
           var element = obj[i];
-          _isValid(objName + '[' + i + ']', element, option);
+          this.isValid(objName + '[' + i + ']', element, option);
         }
       } else {
-        _isValid(optionKey, obj[optionKey], option);
+        this.isValid(optionKey, obj[optionKey], option);
       }
     }
   }
 };
 
-exports.isValidObject = function(obj, options) {
+ObjectChecker.prototype.errorHandler = function (err, req, res, next) {
+  var message = exports.createErrorMessage(err, this.messageTemplate);
+  res.send(message);
+};
+
+
+ObjectChecker.prototype.isValidObject = function(obj, options) {
   try {
-    _isValid('obj', obj, options);
+    this.isValid('obj', obj, options);
   } catch (error) {
-    console.log('error:', exports.createErrorMessage(error, exports.messageTemplate));
+    console.log('error:', exports.createErrorMessage(error, this.messageTemplate));
     return false;
   }
   return true;
 };
 
-exports.checkObject = function(obj, options) {
+ObjectChecker.prototype.checkObject = function(obj, options) {
   var ret = {
     isValid: true,
     message: null
   }
 
   try {
-    _isValid('obj', obj, options);
+    this.isValid('obj', obj, options);
   } catch (error) {
     ret.isValid = false;
-    ret.message = exports.createErrorMessage(error, exports.messageTemplate);
+    ret.message = exports.createErrorMessage(error, this.messageTemplate);
   }
   return ret;
 };
 
-exports.bodyCheckMiddleware = function(options) {
-  var middleware = function(req, res, next) {
+ObjectChecker.prototype.bodyCheckMiddleware = function(options) {
+  return function(req, res, next) {
     var checkTarget = req.body;
     var checkOptions = options;
     try {
-      _isValid('req.body', checkTarget, checkOptions);
+      this.isValid('req.body', checkTarget, checkOptions);
     } catch (error) {
-      exports.errorHandler(error, req, res, next);
+      this.errorHandler(error, req, res, next);
       return;
     }
     next();
   }
+};
 
-  return middleware;
-}
+exports.ObjectChecker = ObjectChecker;
+exports.createObjectChecker = function (options) {
+  return new ObjectChecker(options);
+};

@@ -3,9 +3,9 @@ var objectChecker = require('../object-checker');
 
 describe('main', function() {
 objectChecker.messageTemplate = {
-  "invalid": "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
-  "missing": "Missing {{fieldName}}",
-  "unexpected": "Not support {{fieldName}}"
+  invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+  missing   : "Missing {{fieldName}}",
+  unexpected: "Not support {{fieldName}}"
 };
 
   /* Complicated objects */
@@ -77,6 +77,7 @@ objectChecker.messageTemplate = {
         },
         additional: {
           $isOptional: true,
+          $type: 'json',
           age: {
             $minValue: 20,
             $maxValue: 100
@@ -87,6 +88,7 @@ objectChecker.messageTemplate = {
           },
           score: {
             $minLength: 3,
+            $type: 'array',
             $: {
               $minValue: 60,
               $maxValue: 100
@@ -533,6 +535,108 @@ objectChecker.messageTemplate = {
     var opt = {
       foo: {
         $matchRegExp: 'A[A-Z][0-9]'
+      }
+    };
+    var obj = {
+      foo: '123'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type string ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'string'
+      }
+    };
+    var obj = {
+      foo: 123
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type string ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'string'
+      }
+    };
+    var obj = {
+      foo: '123'
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type number ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'number'
+      }
+    };
+    var obj = {
+      foo: 123
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type number ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'number'
+      }
+    };
+    var obj = {
+      foo: '123'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type int ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'int'
+      }
+    };
+    var obj = {
+      foo: 123
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type int ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'int'
+      }
+    };
+    var obj = {
+      foo: '123'
+    };
+    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type array ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'array',
+        $: {
+          $type: 'int',
+        }
+      }
+    };
+    var obj = {
+      foo: [1, 2, 3]
+    };
+    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type array ' + i++, function() {
+    var opt = {
+      foo: {
+        $type: 'array',
+        $: {
+          $type: 'int',
+        }
       }
     };
     var obj = {

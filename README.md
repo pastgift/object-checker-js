@@ -8,7 +8,7 @@ A tool for checking object. And also provide a middleware for express.
 - Easy to combine with other validation package.
 - Can make `router.js` in Express as an API document.
 
-### Quick Example(Javascript):
+### Quick Example (Javascript):
 ```javascript
 var objectChecker = require('object-checker');
 
@@ -72,7 +72,7 @@ if (!objectChecker.isValidObject(obj, opt)) {
 }
 ```
 
-### Quick Example(coffee):
+### Quick Example (coffee):
 ```coffee
 objectChecker = require 'object-checker'
 
@@ -123,7 +123,7 @@ if not objectChecker.isValidObject obj, opt
   console.log 'Error'
 ```
 
-### Use as an Express Middleware(javascript)
+### Use as an Express Middleware (javascript)
 ```javascript
 // router.js
 
@@ -146,7 +146,7 @@ router.post('/users', bodyCheckMiddleware(opt), handlerFunction);
 module.exports = router;
 ```
 
-### Play with other modules
+### Play with other modules (javascript)
 ```javascript
 // router.js
 
@@ -170,7 +170,26 @@ router.post('/users', bodyCheckMiddleware(opt), handlerFunction);
 module.exports = router;
 ```
 
-### Custom error message and error handler in middleware
+### Custom options and messageTemplate in a instance (javascript)
+```javascript
+var objectChecker = require('../object-checker');
+var checker = objectChecker.createObjectChecker({
+  customDirectives: {
+    $doNotCheck: null,
+    $inRange: function(value, option) { return option.min < value && value < option.max;}
+  },
+  messageTemplate: {
+    invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+    missing   : "Missing {{fieldName}}",
+    unexpected: "Not support {{fieldName}}"
+  }
+};
+
+checker.isValid(...);
+});
+```
+
+### Custom error message and error handler in middleware (javascript)
 ```javascript
 var objectChecker = require('../object-checker');
 objectChecker.messageTemplate = {
@@ -198,6 +217,8 @@ objectChecker.errorHandler = function(err, req, res, next) {
 
 ### Option list
 
+- $type:
+  - Assert the type of value.
 - $skip:
   - Do not check this field.
 - $:
@@ -214,12 +235,12 @@ objectChecker.errorHandler = function(err, req, res, next) {
   - Should be `''`.
 - $isInteger: ture
   - Should be an integer.
-- $isPositiveZeroInteger: Renamed to `isPositiveIntegerOrZero`
+- $isPositiveZeroInteger: Renamed to `$isPositiveIntegerOrZero`
 - $isPositiveIntegerOrZero: true
   - Should be an positive integer or `0`.
 - $isPositiveInteger: ture
   - Should be an positive integer.
-- $isNegativeZeroInteger: Renamed to `isNegativeIntegerOrZero`
+- $isNegativeZeroInteger: Renamed to `$isNegativeIntegerOrZero`
 - $isNegativeIntegerOrZero: ture
   - Should be an negative integer or `0`.
 - $isNegativeInteger: true
