@@ -278,10 +278,13 @@ ObjectChecker.prototype.isValid = function(objName, obj, options) {
   for (var optionKey in options) {
     var option = options[optionKey];
 
-    if (optionKey in this.customDirectives || optionKey in DIRECTIVES) {
-      var checkFunc = this.customDirectives[optionKey]
-                  || DIRECTIVES[optionKey];
+    var hasOption = false;
+    var checkFunc = null;
+    if (optionKey in DIRECTIVES)               hasOption = true, checkFunc = DIRECTIVES[optionKey];
+    if (optionKey in exports.customDirectives) hasOption = true, checkFunc = exports.customDirectives[optionKey];
+    if (optionKey in this.customDirectives)    hasOption = true, checkFunc = this.customDirectives[optionKey];
 
+    if (hasOption) {
       if (!checkFunc) continue;
 
       var checkResult = checkFunc(obj, option);
