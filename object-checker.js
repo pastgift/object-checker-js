@@ -249,6 +249,8 @@
   };
 
   ObjectChecker.prototype.isValid = function(objName, obj, options) {
+    options = options || {};
+
     if (options.$skip == true) {
       return;
     }
