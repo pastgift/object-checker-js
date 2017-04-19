@@ -224,7 +224,13 @@ objectChecker.errorHandler = function(err, req, res, next) {
 - $:
   - Iterate all elements in array.
 - $isOptional: true
-  - Can be `undefined`.
+  - Can be `undefined`. (When `defaultRequired` === true)
+- $optional: true
+  - Alias to `$isOptional`
+- $isRequired: true
+  - Can be `undefined`. (When `defaultRequired` === true)
+- $required: true
+  - Alias to `$isRequired`
 - $allowNull: true
   - Can be `null`.
 - $assertTrue: `assertFunction`

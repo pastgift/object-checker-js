@@ -644,4 +644,87 @@ objectChecker.messageTemplate = {
     };
     assert.equal(false,  objectChecker.isValidObject(obj, opt));
   });
+
+  it('Test Checker - defaultRequired = false ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $required: true,
+        $minValue: 0,
+      }
+    };
+    var obj = {
+      foo: 123
+    };
+    assert.equal(true,  checker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - defaultRequired = false ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $isRequired: true,
+        $minValue: 0,
+      }
+    };
+    var obj = {
+      foo: 123
+    };
+    assert.equal(true,  checker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - defaultRequired = false ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $minValue: 0,
+      }
+    };
+    var obj = {
+    };
+    assert.equal(true,  checker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - defaultRequired = false ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $minValue: 0,
+      }
+    };
+    var obj = {
+      foo: 0
+    };
+    assert.equal(true,  checker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - defaultRequired = false ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $minValue: 0,
+      }
+    };
+    var obj = {
+      foo: -1
+    };
+    assert.equal(false,  checker.isValidObject(obj, opt));
+  });
+
+
 });
