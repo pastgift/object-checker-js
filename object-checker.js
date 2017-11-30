@@ -26,6 +26,7 @@
           return Array.isArray(v);
 
         case 'json':
+        case 'object':
           return 'object' === typeof v;
 
         default:
@@ -86,14 +87,14 @@
 
     $minValue: function(v, minValue) {
       if (typeof v != 'number') {
-        return false;
+        v = parseFloat(v);
       }
       return v >= minValue;
     },
 
     $maxValue: function(v, maxValue) {
       if (typeof v != 'number') {
-        return false;
+        v = parseFloat(v);
       }
       return v <= maxValue;
     },
