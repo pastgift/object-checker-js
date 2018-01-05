@@ -263,7 +263,7 @@
   ObjectChecker.prototype.isValid = function(objName, obj, options) {
     options = options || {};
 
-    if (options.$skip === true || (options.$type || 'any').toLowerCase() === 'any') {
+    if (options.$skip === true || (options.$type || '').toLowerCase() === 'any') {
       return;
     }
 
