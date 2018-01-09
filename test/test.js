@@ -726,5 +726,36 @@ objectChecker.messageTemplate = {
     assert.equal(false,  checker.isValidObject(obj, opt));
   });
 
+  it('Test Checker - Type any ' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
 
+    var opt = {
+      foo: {
+        $type: 'any',
+        $isRequired: true
+      }
+    };
+    var obj = {
+      foo: -1
+    };
+    assert.equal(true,  checker.isValidObject(obj, opt));
+  });
+
+  it('Test Checker - Type any, Not existed' + i++, function() {
+    var checker = new objectChecker.ObjectChecker({
+      defaultRequired: false,
+    });
+
+    var opt = {
+      foo: {
+        $type: 'any',
+        $isRequired: true
+      }
+    };
+    var obj = {
+    };
+    assert.equal(false,  checker.isValidObject(obj, opt));
+  });
 });

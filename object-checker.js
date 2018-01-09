@@ -263,21 +263,6 @@
   ObjectChecker.prototype.isValid = function(objName, obj, options) {
     options = options || {};
 
-    if (options.$skip === true || (options.$type || '').toLowerCase() === 'any') {
-      return;
-    }
-
-    if (typeof obj === 'object' && typeof obj != 'undefined' && obj != null) {
-      for (var objKey in obj) {
-        if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
-          var e = new Error();
-          e.type = 'unexpected';
-          e.fieldName = objKey;
-          throw e;
-        }
-      }
-    }
-
     if (this.defaultRequired === true
         && (options.$isOptional || options.$optional) === true
         && typeof obj === 'undefined') {
@@ -299,6 +284,22 @@
       e.type = 'missing';
       e.fieldName = objName;
       throw e;
+    }
+
+    options.$type = (options.$type + '').toLowerCase();
+    if (options.$skip === true || options.$type === 'any' || options.$type === '*') {
+      return;
+    }
+
+    if (typeof obj === 'object' && typeof obj != 'undefined' && obj != null) {
+      for (var objKey in obj) {
+        if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
+          var e = new Error();
+          e.type = 'unexpected';
+          e.fieldName = objKey;
+          throw e;
+        }
+      }
     }
 
     for (var optionKey in options) {
