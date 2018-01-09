@@ -286,8 +286,8 @@
       throw e;
     }
 
-    options.$type = (options.$type + '').toLowerCase();
-    if (options.$skip === true || options.$type === 'any' || options.$type === '*') {
+    var objType = (options.$type + '').toLowerCase();
+    if (options.$skip === true || objType === 'any' || objType === '*') {
       return;
     }
 
