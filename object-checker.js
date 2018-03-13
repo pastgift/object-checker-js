@@ -11,23 +11,36 @@
     // New directives
     $type: function(v, t) {
       switch (t.toLowerCase()) {
+        case 'str':
         case 'string':
           return 'string' === typeof v;
 
+        case 'num':
         case 'number':
         case 'float':
           return 'number' === typeof v;
 
         case 'int':
+        case 'integer':
           var reInteger = /^-?\d+$/;
           return 'number' === typeof v && reInteger.test(v);
 
+        case 'arr':
         case 'array':
           return Array.isArray(v);
 
         case 'json':
+        case 'obj':
         case 'object':
           return 'object' === typeof v;
+
+        case 'jsonstring':
+          try {
+            JSON.parse(v)
+            return true
+          } catch(ex) {
+            return false
+          }
 
         default:
           return true;
@@ -291,7 +304,8 @@
       return;
     }
 
-    if (typeof obj === 'object' && typeof obj != 'undefined' && obj != null) {
+    if (typeof obj === 'object' && typeof obj != 'undefined' && obj != null
+      && objType !== 'json' && objType !== 'obj' && objType !== 'object') {
       for (var objKey in obj) {
         if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
           var e = new Error();
