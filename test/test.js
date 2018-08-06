@@ -3,37 +3,39 @@ var objectChecker = require('../object-checker');
 
 describe('main', function() {
   /* Config */
-  objectChecker.messageTemplate = {
-    invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
-    missing   : "Missing {{fieldName}}",
-    unexpected: "Not support {{fieldName}}"
+  var options = {
+    messageTemplate: {
+      invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+      missing   : "Missing {{fieldName}}",
+      unexpected: "Not support {{fieldName}}"
+    }
   };
 
-  var checker = objectChecker.createObjectChecker();
+  var checker = objectChecker.createObjectChecker(options);
 
   /* Complicated objects */
   var complicatedValidObj = {
     users: [
       {
-        id: 1,
+        id  : 1,
         name:"a@a.com",
-        additional:{
-          age: 20,
+        additional: {
+          age   : 20,
           height: 180,
-          score: [80, 90, 100]
+          score : [80, 90, 100]
         }
       },
       {
-        id: 2,
+        id  : 2,
         name:"123@b.com"
       },
       {
-        id: 3,
+        id  : 3,
         name:"123@a.com",
         additional: {
-          age: 100,
-          height:200,
-          score: [60, 70, 80, 90]
+          age   : 100,
+          height: 200,
+          score : [60, 70, 80, 90]
         }
       }
     ]
@@ -42,25 +44,25 @@ describe('main', function() {
   var complicatedInValidObj = {
     users: [
       {
-        id: 'a1',
+        id  : 'a1',
         name:"a@a.com",
-        additional:{
-          age: 20,
+        additional: {
+          age   : 20,
           height: 180,
-          score: [80, 90, 100]
+          score : [80, 90, 100]
         }
       },
       {
-        id: 2,
+        id  : 2,
         name:"123@b.com"
       },
       {
-        id: 3,
+        id  : 3,
         name:"123@a.com",
         additional: {
-          age: 500,
-          height:300,
-          score: [30]
+          age   : 500,
+          height: 300,
+          score : [30]
         }
       }
     ]
@@ -74,7 +76,7 @@ describe('main', function() {
           $matchRegExp: '^\\d$',
         },
         name: {
-          $isEmail: true,
+          $isEmail  : true,
           $minLength: 6,
           $maxLength: 10
         },
@@ -119,11 +121,11 @@ describe('main', function() {
       $maxLength: 10
     },
     age: {
-      $minValue:1,
-      $maxValue:100
+      $minValue: 1,
+      $maxValue: 100
     },
     email: {
-      $isEmail: true,
+      $isEmail   : true,
       $isOptional: true
     },
     score1: {
@@ -148,10 +150,10 @@ describe('main', function() {
       $isLength: 5
     },
     range1: {
-      $in:[1,2,3]
+      $in: [1,2,3]
     },
     range2: {
-      $notIn:[1,2,3]
+      $notIn: [1,2,3]
     }
   };
 
@@ -161,17 +163,17 @@ describe('main', function() {
   it('Test Checker - valid object ' + i++, function() {
     var obj = {
       username: 'abcdef',
-      age: 1,
-      email: 'a@e.com',
-      score1: 1,
-      score2: 0,
-      score3: 1,
-      score4: 0,
-      score5: -1,
-      fix1: 12345,
-      fix2: '11111',
-      range1: 1,
-      range2: 0
+      age     : 1,
+      email   : 'a@e.com',
+      score1  : 1,
+      score2  : 0,
+      score3  : 1,
+      score4  : 0,
+      score5  : -1,
+      fix1    : 12345,
+      fix2    : '11111',
+      range1  : 1,
+      range2  : 0
     };
     assert.equal(true,  checker.isValid(obj, opt));
   });
@@ -179,16 +181,16 @@ describe('main', function() {
   it('Test Checker - valid object ' + i++, function() {
     var obj = {
       username: 'abcdef1234',
-      age: 100,
-      score1: 100,
-      score2: 1,
-      score3: 1,
-      score4: -1,
-      score5: -1,
-      fix1: 12345,
-      fix2: '12345',
-      range1: 2,
-      range2: 4
+      age     : 100,
+      score1  : 100,
+      score2  : 1,
+      score3  : 1,
+      score4  : -1,
+      score5  : -1,
+      fix1    : 12345,
+      fix2    : '12345',
+      range1  : 2,
+      range2  : 4
     };
     assert.equal(true,  checker.isValid(obj, opt));
   });
@@ -516,7 +518,7 @@ describe('main', function() {
     };
     var obj = {
       foo: {
-        bar: [1,2,3,4,5]
+        bar: [1, 2, 3, 4, 5]
       }
     };
     assert.equal(true,  checker.isValid(obj, opt));
@@ -673,7 +675,7 @@ describe('main', function() {
     var opt = {
       foo: {
         $isRequired: true,
-        $minValue: 0,
+        $minValue  : 0,
       }
     };
     var obj = {
@@ -736,7 +738,7 @@ describe('main', function() {
 
     var opt = {
       foo: {
-        $type: 'any',
+        $type      : 'any',
         $isRequired: true
       }
     };
@@ -753,7 +755,7 @@ describe('main', function() {
 
     var opt = {
       foo: {
-        $type: 'any',
+        $type      : 'any',
         $isRequired: true
       }
     };

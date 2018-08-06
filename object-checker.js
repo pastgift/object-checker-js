@@ -174,22 +174,7 @@
     }
   };
 
-  /* Configurable */
-  var defaultRequired = true;
-
-  var messageTemplate = {
-    invalid   : "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
-    missing   : "Field `{{fieldName}}` is missing.",
-    unexpected: "Found unexpected field `{{fieldName}}`"
-  };
-
-  var customDirectives = {};
-
   /* Functional methods */
-  function setDefaultRequired(required) {
-    defaultRequired = required;
-  };
-
   function createErrorMessage(e, template) {
     var errorMessage = template[e.type];
     if (errorMessage) {
@@ -209,17 +194,24 @@
   /**
    * ObjectChecker
    * @param {Object} options - ObjectCheck options
+   * @param {Object} [options.defaultRequired]
    * @param {Object} [options.customDirectives]
    * @param {Object} [options.messageTemplate]
    */
   function ObjectChecker(options) {
-    this.defaultRequired  = defaultRequired;
-    this.customDirectives = options.customDirectives || customDirectives;
-    this.messageTemplate  = options.messageTemplate  || messageTemplate;
-
-    if ('undefined' !== typeof options.defaultRequired) {
+    if (options.defaultRequired !== true && options.defaultRequired !== false) {
+      this.defaultRequired = true;
+    } else {
       this.defaultRequired = options.defaultRequired;
     }
+
+    this.messageTemplate = options.messageTemplate || {
+      invalid   : "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
+      missing   : "Field `{{fieldName}}` is missing.",
+      unexpected: "Found unexpected field `{{fieldName}}`"
+    };
+
+    this.customDirectives = options.customDirectives || {};
   };
 
   ObjectChecker.prototype.verify = function(objName, obj, options) {
@@ -271,7 +263,6 @@
       var hasOption = false;
       var checkFunc = null;
       if (optionKey in DIRECTIVES)            hasOption = true, checkFunc = DIRECTIVES[optionKey];
-      if (optionKey in customDirectives)      hasOption = true, checkFunc = customDirectives[optionKey];
       if (optionKey in this.customDirectives) hasOption = true, checkFunc = this.customDirectives[optionKey];
 
       if (hasOption) {
@@ -369,9 +360,6 @@
   };
 
   var objectChecker = {
-    messageTemplate    : messageTemplate,
-    customDirectives   : customDirectives,
-    setDefaultRequired : setDefaultRequired,
     createErrorMessage : createErrorMessage,
     ObjectChecker      : ObjectChecker,
     createObjectChecker: createObjectChecker,
