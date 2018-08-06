@@ -186,7 +186,7 @@
     if (e.type === 'invalid') {
       errorMessage = errorMessage.replace(/\{\{fieldValue\}\}/g, JSON.stringify(e.fieldValue));
       errorMessage = errorMessage.replace(/\{\{checkerName\}\}/g, e.checkerName.slice(1));
-      errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, e.checkerOption);
+      errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, JSON.stringify(e.checkerOption));
     }
     return errorMessage;
   };

@@ -1,4 +1,4 @@
-# object-checker
+# object-checker-js
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
 
@@ -19,9 +19,11 @@ A tool for checking object. And also provide a middleware for express.
 - Can make `router.js` in Express as an API document.
 
 ### Quick Example:
+
 ```javascript
 var objectChecker = require('object-checker');
 
+var checker = objectChecker.createObjectChecker()
 var obj = {
   users: [
     {
@@ -77,12 +79,11 @@ var opt = {
   }
 };
 
-if (!objectChecker.isValid(obj, opt)) {
-  console.log('Error');
-}
+console.log(checker.check(obj, opt));
 ```
 
 ### Use as an Express Middleware
+
 ```javascript
 // router.js
 
@@ -106,6 +107,7 @@ module.exports = router;
 ```
 
 ### Play with other modules
+
 ```javascript
 // router.js
 
@@ -130,6 +132,7 @@ module.exports = router;
 ```
 
 ### Custom customDirectives and messageTemplate
+
 ```javascript
 var objectChecker = require('../object-checker');
 var checker = objectChecker.createObjectChecker({
@@ -148,6 +151,7 @@ checker.verify(yourObject);
 ```
 
 ### Custom error message and error handler in middleware (javascript)
+
 ```javascript
 var objectChecker = require('../object-checker');
 objectChecker.messageTemplate = {
@@ -233,17 +237,20 @@ objectChecker.expressErrorHandler = function(err, req, res, next) {
   - Should not match `RegExp`.
 
 ### Install:
+
 ```shell
 npm install object-checker
 ```
 
 ### Test:
+
 ```shell
 cd node_modules/object-checker
 npm test
 ```
 
 ### License
+
 [MIT](LICENSE)
 
 [downloads-image]: http://img.shields.io/npm/dm/object-checker.svg

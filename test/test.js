@@ -41,7 +41,7 @@ describe('main', function() {
     ]
   };
 
-  var complicatedInValidObj = {
+  var complicatedInvalidObj = {
     users: [
       {
         id  : 'a1',
@@ -93,7 +93,7 @@ describe('main', function() {
           },
           score: {
             $minLength: 3,
-            $type: 'array',
+            $type     : 'array',
             $: {
               $minValue: 60,
               $maxValue: 100
@@ -109,11 +109,10 @@ describe('main', function() {
   });
 
   it('Complicated Object - invalid object', function() {
-    assert.equal(false,  checker.isValid(complicatedInValidObj, complicatedOptions));
+    assert.equal(false,  checker.isValid(complicatedInvalidObj, complicatedOptions));
   });
 
   /* Simple objects */
-  var i;
   var obj;
   var opt = {
     username: {
@@ -158,9 +157,7 @@ describe('main', function() {
   };
 
   /* Valid objects */
-  i = 1;
-
-  it('Test Checker - valid object ' + i++, function() {
+  it('valid object ', function() {
     var obj = {
       username: 'abcdef',
       age     : 1,
@@ -178,7 +175,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - valid object ' + i++, function() {
+  it('valid object ', function() {
     var obj = {
       username: 'abcdef1234',
       age     : 100,
@@ -196,9 +193,7 @@ describe('main', function() {
   });
 
   /* Invalid objects */
-  i = 1;
-
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $minLength: 3
@@ -210,7 +205,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $maxLength: 3
@@ -222,7 +217,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $minValue: 3
@@ -234,7 +229,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $maxValue: 3
@@ -246,7 +241,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isEmail: true
@@ -258,7 +253,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $in: [1, 2]
@@ -270,7 +265,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $notIn: [1, 2]
@@ -282,7 +277,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isValue: 9
@@ -294,7 +289,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isInteger: true
@@ -306,7 +301,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     vopt = {
       foo: {
         $isPositiveZeroInteger: true
@@ -318,7 +313,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isPositiveInteger: true
@@ -330,7 +325,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isNegativeZeroInteger: true
@@ -342,7 +337,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isNegativeInteger: true
@@ -354,7 +349,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $notEmptyString: true
@@ -366,7 +361,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $assertTrue: function(v) {return (v == 'assertTrue')}
@@ -378,7 +373,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $assertFalse: function(v) {return (v == 'xxx')}
@@ -390,7 +385,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $matchRegExp: /^[12]$/
@@ -402,7 +397,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $notMatchRegExp: /^[12]$/
@@ -414,7 +409,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - invalid object ' + i++, function() {
+  it('invalid object ', function() {
     var opt = {
       foo: {
         $isInteger: true
@@ -426,7 +421,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - null field ' + i++, function() {
+  it('null field ', function() {
     var opt = {
       foo: {
         $allowNull: true,
@@ -439,7 +434,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - null field ' + i++, function() {
+  it('null field ', function() {
     var opt = {
       foo: {
         $allowNull: true,
@@ -452,7 +447,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - null field ' + i++, function() {
+  it('null field ', function() {
     var opt = {
       foo: {
         $allowNull: true,
@@ -465,7 +460,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - with validator ' + i++, function() {
+  it('with validator ', function() {
     var opt = {
       foo: {
         $validator$isURL: {
@@ -480,7 +475,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - with validator ' + i++, function() {
+  it('with validator ', function() {
     var opt = {
       foo: {
         $validator$isURL: {
@@ -495,7 +490,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Additional Test - Additional member in Array ' + i++, function() {
+  it('Additional Test - Additional member in Array ', function() {
     var opt = {
       foo: {
         $: {
@@ -510,7 +505,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Skip option ' + i++, function() {
+  it('Skip option ', function() {
     var opt = {
       foo: {
         $skip: true
@@ -524,7 +519,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - RegExp in string ' + i++, function() {
+  it('RegExp in string ', function() {
     var opt = {
       foo: {
         $matchRegExp: 'A[A-Z][0-9]'
@@ -536,7 +531,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - RegExp in string ' + i++, function() {
+  it('RegExp in string ', function() {
     var opt = {
       foo: {
         $matchRegExp: 'A[A-Z][0-9]'
@@ -548,7 +543,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type string ' + i++, function() {
+  it('Type string ', function() {
     var opt = {
       foo: {
         $type: 'string'
@@ -560,7 +555,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type string ' + i++, function() {
+  it('Type string ', function() {
     var opt = {
       foo: {
         $type: 'string'
@@ -572,7 +567,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type number ' + i++, function() {
+  it('Type number ', function() {
     var opt = {
       foo: {
         $type: 'number'
@@ -584,7 +579,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type number ' + i++, function() {
+  it('Type number ', function() {
     var opt = {
       foo: {
         $type: 'number'
@@ -596,7 +591,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type int ' + i++, function() {
+  it('Type int ', function() {
     var opt = {
       foo: {
         $type: 'int'
@@ -608,7 +603,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type int ' + i++, function() {
+  it('Type int ', function() {
     var opt = {
       foo: {
         $type: 'int'
@@ -620,7 +615,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type array ' + i++, function() {
+  it('Type array ', function() {
     var opt = {
       foo: {
         $type: 'array',
@@ -635,7 +630,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type array ' + i++, function() {
+  it('Type array ', function() {
     var opt = {
       foo: {
         $type: 'array',
@@ -650,7 +645,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - defaultRequired = false ' + i++, function() {
+  it('defaultRequired = false ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -667,7 +662,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - defaultRequired = false ' + i++, function() {
+  it('defaultRequired = false ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -684,7 +679,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - defaultRequired = false ' + i++, function() {
+  it('defaultRequired = false ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -699,7 +694,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - defaultRequired = false ' + i++, function() {
+  it('defaultRequired = false ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -715,7 +710,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - defaultRequired = false ' + i++, function() {
+  it('defaultRequired = false ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -731,7 +726,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type any ' + i++, function() {
+  it('Type any ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
@@ -748,7 +743,7 @@ describe('main', function() {
     assert.equal(true,  checker.isValid(obj, opt));
   });
 
-  it('Test Checker - Type any, Not existed' + i++, function() {
+  it('Type any, Not existed ', function() {
     var checker = new objectChecker.ObjectChecker({
       defaultRequired: false,
     });
