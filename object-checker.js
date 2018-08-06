@@ -214,7 +214,7 @@
     this.customDirectives = options.customDirectives || {};
   };
 
-  ObjectChecker.prototype.verify = function(objName, obj, options) {
+  ObjectChecker.prototype.verify = function(obj, options, objName) {
     options = options || {};
 
     if (this.defaultRequired === true
@@ -236,7 +236,7 @@
     if (typeof obj === 'undefined') {
       var e = new Error();
       e.type = 'missing';
-      e.fieldName = objName;
+      e.fieldName = objName || 'obj';
       throw e;
     }
 
@@ -301,10 +301,10 @@
         } else if (optionKey === '$') {
           for (var i in obj) {
             var element = obj[i];
-            this.verify(objName + '[' + i + ']', element, option);
+            this.verify(element, option, objName + '[' + i + ']');
           }
         } else {
-          this.verify(optionKey, obj[optionKey], option);
+          this.verify(obj[optionKey], option, optionKey);
         }
       }
     }
@@ -312,7 +312,7 @@
 
   ObjectChecker.prototype.isValid = function(obj, options) {
     try {
-      this.verify('obj', obj, options);
+      this.verify(obj, options, 'obj');
     } catch (error) {
       return false;
     }
@@ -326,7 +326,7 @@
     }
 
     try {
-      this.verify('obj', obj, options);
+      this.verify(obj, options, 'obj');
 
     } catch (error) {
       ret.isValid = false;
@@ -346,7 +346,7 @@
       var checkTarget = req.body;
       var checkOptions = options;
       try {
-        this.verify('req.body', checkTarget, checkOptions);
+        this.verify(checkTarget, checkOptions, 'req.body');
       } catch (error) {
         this.expressErrorHandler(error, req, res, next);
         return;
