@@ -1,12 +1,15 @@
-var assert = require('assert');
+var assert        = require('assert');
 var objectChecker = require('../object-checker');
 
 describe('main', function() {
-objectChecker.messageTemplate = {
-  invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
-  missing   : "Missing {{fieldName}}",
-  unexpected: "Not support {{fieldName}}"
-};
+  /* Config */
+  objectChecker.messageTemplate = {
+    invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+    missing   : "Missing {{fieldName}}",
+    unexpected: "Not support {{fieldName}}"
+  };
+
+  var checker = objectChecker.createObjectChecker();
 
   /* Complicated objects */
   var complicatedValidObj = {
@@ -100,11 +103,11 @@ objectChecker.messageTemplate = {
   };
 
   it('Complicated Object - valid object', function() {
-    assert.equal(true, objectChecker.isValidObject(complicatedValidObj, complicatedOptions));
+    assert.equal(true, checker.isValid(complicatedValidObj, complicatedOptions));
   });
 
   it('Complicated Object - invalid object', function() {
-    assert.equal(false,  objectChecker.isValidObject(complicatedInValidObj, complicatedOptions));
+    assert.equal(false,  checker.isValid(complicatedInValidObj, complicatedOptions));
   });
 
   /* Simple objects */
@@ -170,7 +173,7 @@ objectChecker.messageTemplate = {
       range1: 1,
       range2: 0
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - valid object ' + i++, function() {
@@ -187,7 +190,7 @@ objectChecker.messageTemplate = {
       range1: 2,
       range2: 4
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   /* Invalid objects */
@@ -202,7 +205,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'ab'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -214,7 +217,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'abcd'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -226,7 +229,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 2
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -238,7 +241,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 4
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -250,7 +253,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'a@@.com'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -262,7 +265,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 0
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -274,7 +277,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 1
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -286,7 +289,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 8
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -298,7 +301,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'a'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -310,7 +313,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: -1
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -322,7 +325,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 0
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -334,7 +337,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 1
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -346,7 +349,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 0
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -358,7 +361,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: ''
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -370,7 +373,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'xxx'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -382,7 +385,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'xxx'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -394,7 +397,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '3'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -406,7 +409,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '1'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - invalid object ' + i++, function() {
@@ -418,7 +421,7 @@ objectChecker.messageTemplate = {
     var obj = {
       bar: 2
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - null field ' + i++, function() {
@@ -431,7 +434,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 2
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - null field ' + i++, function() {
@@ -444,7 +447,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: null
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - null field ' + i++, function() {
@@ -457,7 +460,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'abc'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - with validator ' + i++, function() {
@@ -472,7 +475,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'www.google.com'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - with validator ' + i++, function() {
@@ -487,7 +490,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'http://www.google.com'
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Additional Test - Additional member in Array ' + i++, function() {
@@ -502,7 +505,7 @@ objectChecker.messageTemplate = {
       foo: [1,2,3,4,5]
     };
     obj.foo.xxx = 1;
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Skip option ' + i++, function() {
@@ -516,7 +519,7 @@ objectChecker.messageTemplate = {
         bar: [1,2,3,4,5]
       }
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - RegExp in string ' + i++, function() {
@@ -528,7 +531,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 'AB3'
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - RegExp in string ' + i++, function() {
@@ -540,7 +543,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '123'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type string ' + i++, function() {
@@ -552,7 +555,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 123
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type string ' + i++, function() {
@@ -564,7 +567,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '123'
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type number ' + i++, function() {
@@ -576,7 +579,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 123
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type number ' + i++, function() {
@@ -588,7 +591,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '123'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type int ' + i++, function() {
@@ -600,7 +603,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 123
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type int ' + i++, function() {
@@ -612,7 +615,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '123'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type array ' + i++, function() {
@@ -627,7 +630,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: [1, 2, 3]
     };
-    assert.equal(true,  objectChecker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type array ' + i++, function() {
@@ -642,7 +645,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: '123'
     };
-    assert.equal(false,  objectChecker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - defaultRequired = false ' + i++, function() {
@@ -659,7 +662,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 123
     };
-    assert.equal(true,  checker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - defaultRequired = false ' + i++, function() {
@@ -676,7 +679,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 123
     };
-    assert.equal(true,  checker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - defaultRequired = false ' + i++, function() {
@@ -691,7 +694,7 @@ objectChecker.messageTemplate = {
     };
     var obj = {
     };
-    assert.equal(true,  checker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - defaultRequired = false ' + i++, function() {
@@ -707,7 +710,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: 0
     };
-    assert.equal(true,  checker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - defaultRequired = false ' + i++, function() {
@@ -723,7 +726,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: -1
     };
-    assert.equal(false,  checker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type any ' + i++, function() {
@@ -740,7 +743,7 @@ objectChecker.messageTemplate = {
     var obj = {
       foo: -1
     };
-    assert.equal(true,  checker.isValidObject(obj, opt));
+    assert.equal(true,  checker.isValid(obj, opt));
   });
 
   it('Test Checker - Type any, Not existed' + i++, function() {
@@ -756,6 +759,6 @@ objectChecker.messageTemplate = {
     };
     var obj = {
     };
-    assert.equal(false,  checker.isValidObject(obj, opt));
+    assert.equal(false,  checker.isValid(obj, opt));
   });
 });

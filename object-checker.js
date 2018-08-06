@@ -22,8 +22,8 @@
 
         case 'int':
         case 'integer':
-          var reInteger = /^-?\d+$/;
-          return 'number' === typeof v && reInteger.test(v);
+          var re = /^(-?[1-9][0-9]*)|0$/;
+          return 'number' === typeof v && re.test(v);
 
         case 'arr':
         case 'array':
@@ -64,38 +64,38 @@
     },
 
     $isInteger: function(v, flg) {
-      var reInteger = /^-?\d+$/;
-      return flg === reInteger.test(v);
+      var re = /^(-?[1-9][0-9]*)|0$/;
+      return flg === re.test(v);
     },
 
     $isPositiveZeroInteger: function(v, flg) {
-      var rePositiveZeroInteger = /^\d+$/;
-      return flg === rePositiveZeroInteger.test(v);
+      var re = /^([1-9][0-9]*)|0$/;
+      return flg === re.test(v);
     },
 
     $isPositiveIntegerOrZero: function(v, flg) {
-      var rePositiveZeroInteger = /^\d+$/;
-      return flg === rePositiveZeroInteger.test(v);
+      var re = /^([1-9][0-9]*)|0$/;
+      return flg === re.test(v);
     },
 
     $isPositiveInteger: function(v, flg) {
-      var rePositiveInteger = /^[0-9]*[1-9][0-9]*$/;
-      return flg === rePositiveInteger.test(v);
+      var re = /^[1-9][0-9]*$/;
+      return flg === re.test(v);
     },
 
     $isNegativeZeroInteger: function(v, flg) {
-      var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
-      return flg === reNegativeZeroInteger.test(v);
+      var re = /^(-[1-9][0-9]*)|0$/;
+      return flg === re.test(v);
     },
 
     $isNegativeIntegerOrZero: function(v, flg) {
-      var reNegativeZeroInteger = /^((-\d+)|(0+))$/;
-      return flg === reNegativeZeroInteger.test(v);
+      var re = /^(-[1-9][0-9]*)|0$/;
+      return flg === re.test(v);
     },
 
     $isNegativeInteger: function(v, flg) {
-      var reNegativeInteger = /^-[0-9]*[1-9][0-9]*$/;
-      return flg === reNegativeInteger.test(v);
+      var re = /^-[1-9][0-9]*$/;
+      return flg === re.test(v);
     },
 
     $minValue: function(v, minValue) {
@@ -178,8 +178,8 @@
   var defaultRequired = true;
 
   var messageTemplate = {
-    invalid: "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
-    missing: "Field `{{fieldName}}` is missing.",
+    invalid   : "Field `{{fieldName}}` value `{{fieldValue}}` is not valid. ({{checkerName}} = {{checkerOption}})",
+    missing   : "Field `{{fieldName}}` is missing.",
     unexpected: "Found unexpected field `{{fieldName}}`"
   };
 
@@ -190,8 +190,8 @@
     defaultRequired = required;
   };
 
-  function createErrorMessage(e, messageTemplate) {
-    var errorMessage = messageTemplate[e.type];
+  function createErrorMessage(e, template) {
+    var errorMessage = template[e.type];
     if (errorMessage) {
       errorMessage = errorMessage.replace(/\{\{fieldName\}\}/g,  e.fieldName);
     } else {
@@ -204,57 +204,6 @@
       errorMessage = errorMessage.replace(/\{\{checkerOption\}\}/g, e.checkerOption);
     }
     return errorMessage;
-  };
-
-  function isValidObject(obj, options) {
-    try {
-      var checker = createObjectChecker({
-        customDirectives: customDirectives,
-        messageTemplate : messageTemplate,
-      });
-      checker.isValid('obj', obj, options);
-    } catch (error) {
-      console.log('error:', createErrorMessage(error, messageTemplate));
-      return false;
-    }
-    return true;
-  };
-
-  function checkObject(obj, options) {
-    var ret = {
-      isValid: true,
-      message: null
-    }
-
-    try {
-      var checker = createObjectChecker({
-        customDirectives: customDirectives,
-        messageTemplate : messageTemplate,
-      });
-      checker.isValid('obj', obj, options);
-    } catch (error) {
-      ret.isValid = false;
-      ret.message = createErrorMessage(error, messageTemplate);
-    }
-    return ret;
-  };
-
-  function bodyCheckMiddleware(options) {
-    return function(req, res, next) {
-      var checkTarget = req.body;
-      var checkOptions = options;
-      try {
-        var checker = createObjectChecker({
-          customDirectives: customDirectives,
-          messageTemplate : messageTemplate,
-        });
-        checker.isValid('req.body', checkTarget, checkOptions);
-      } catch (error) {
-        errorHandler(error, req, res, next);
-        return;
-      }
-      next();
-    }
   };
 
   /**
@@ -273,7 +222,7 @@
     }
   };
 
-  ObjectChecker.prototype.isValid = function(objName, obj, options) {
+  ObjectChecker.prototype.verify = function(objName, obj, options) {
     options = options || {};
 
     if (this.defaultRequired === true
@@ -361,53 +310,54 @@
         } else if (optionKey === '$') {
           for (var i in obj) {
             var element = obj[i];
-            this.isValid(objName + '[' + i + ']', element, option);
+            this.verify(objName + '[' + i + ']', element, option);
           }
         } else {
-          this.isValid(optionKey, obj[optionKey], option);
+          this.verify(optionKey, obj[optionKey], option);
         }
       }
     }
   };
 
-  ObjectChecker.prototype.errorHandler = function (err, req, res, next) {
-    var message = createErrorMessage(err, this.messageTemplate);
-    res.send(message);
-  };
-
-  ObjectChecker.prototype.isValidObject = function(obj, options) {
+  ObjectChecker.prototype.isValid = function(obj, options) {
     try {
-      this.isValid('obj', obj, options);
+      this.verify('obj', obj, options);
     } catch (error) {
-      console.log('error:', createErrorMessage(error, this.messageTemplate));
       return false;
     }
     return true;
   };
 
-  ObjectChecker.prototype.checkObject = function(obj, options) {
+  ObjectChecker.prototype.check = function(obj, options) {
     var ret = {
       isValid: true,
       message: null
     }
 
     try {
-      this.isValid('obj', obj, options);
+      this.verify('obj', obj, options);
+
     } catch (error) {
       ret.isValid = false;
       ret.message = createErrorMessage(error, this.messageTemplate);
     }
+
     return ret;
   };
 
-  ObjectChecker.prototype.bodyCheckMiddleware = function(options) {
+  ObjectChecker.prototype.expressErrorHandler = function (err, req, res, next) {
+    var message = createErrorMessage(err, this.messageTemplate);
+    res.send(message);
+  };
+
+  ObjectChecker.prototype.expressBodyCheckMiddleware = function(options) {
     return function(req, res, next) {
       var checkTarget = req.body;
       var checkOptions = options;
       try {
-        this.isValid('req.body', checkTarget, checkOptions);
+        this.verify('req.body', checkTarget, checkOptions);
       } catch (error) {
-        this.errorHandler(error, req, res, next);
+        this.expressErrorHandler(error, req, res, next);
         return;
       }
       next();
@@ -415,7 +365,7 @@
   };
 
   function createObjectChecker(options) {
-    return new ObjectChecker(options);
+    return new ObjectChecker(options || {});
   };
 
   var objectChecker = {
@@ -423,9 +373,6 @@
     customDirectives   : customDirectives,
     setDefaultRequired : setDefaultRequired,
     createErrorMessage : createErrorMessage,
-    isValidObject      : isValidObject,
-    checkObject        : checkObject,
-    bodyCheckMiddleware: bodyCheckMiddleware,
     ObjectChecker      : ObjectChecker,
     createObjectChecker: createObjectChecker,
   };

@@ -2,13 +2,23 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url]
 
+> Notice: the package is updated to `v1.0.0` and APIs are changed:
+
+|          API          |                    before `v1.0.0`                    |              after `v1.0.0`             |
+|-----------------------|-------------------------------------------------------|-----------------------------------------|
+| `isValid()`           | Check the object and throw Exceptions when invalid    | Renamed to `verify()`                   |
+| `checkObject()`       | Check the object and return check result.             | Renamed to `check()`                    |
+| `isValidObject()`     | Check the object and return `true`/`false` for result | Renamed to `isValid()`                  |
+| `bodyCheckMiddleware` | Middleware for express                                | Renamed to `expressBodyCheckMiddleware` |
+| `errorHandler`        | Handler for middleware                                | Renamed to `expressErrorHandler`        |
+
 A tool for checking object. And also provide a middleware for express.
 
 - No validation codes.
 - Easy to combine with other validation package.
 - Can make `router.js` in Express as an API document.
 
-### Quick Example (Javascript):
+### Quick Example:
 ```javascript
 var objectChecker = require('object-checker');
 
@@ -17,9 +27,9 @@ var obj = {
     {
       name:"a@a.com",
       additional:{
-        age: 20,
+        age   : 20,
         height: 180,
-        score: [80, 90, 100]
+        score : [80, 90, 100]
       }
     },
     {
@@ -28,9 +38,9 @@ var obj = {
     {
       name:"123@a.com",
       additional: {
-        age: 100,
+        age   : 100,
         height:200,
-        score: [60, 70, 80, 90]
+        score : [60, 70, 80, 90]
       }
     }
   ]
@@ -41,7 +51,7 @@ var opt = {
     $maxLength: 5,
     $: {
       name: {
-        $isEmail: true,
+        $isEmail  : true,
         $minLength: 6,
         $maxLength: 10
       },
@@ -67,68 +77,17 @@ var opt = {
   }
 };
 
-if (!objectChecker.isValidObject(obj, opt)) {
+if (!objectChecker.isValid(obj, opt)) {
   console.log('Error');
 }
 ```
 
-### Quick Example (coffee):
-```coffee
-objectChecker = require 'object-checker'
-
-obj =
-  users: [
-    {
-      name:"a@a.com"
-      additional:
-        age: 20
-        height: 180
-        score: [80, 90, 100]
-    },
-    {
-      name:"123@b.com"
-    },
-    {
-      name:"123@a.com"
-      additional:
-        age: 500
-        height:300
-        score: [30]
-    }
-  ]
-
-options =
-  users:
-    $maxLength: 5
-    $:
-      name:
-        $isEmail: true
-        $minLength: 6
-        $maxLength: 10
-      additional:
-        $isOptional: true
-        age:
-          $minValue: 20
-          $maxValue: 100
-        height:
-          $minValue: 100
-          $maxValue: 200
-        score:
-          $minLength: 3
-          $:
-            $minValue: 60
-            $maxValue: 100
-
-if not objectChecker.isValidObject obj, opt
-  console.log 'Error'
-```
-
-### Use as an Express Middleware (javascript)
+### Use as an Express Middleware
 ```javascript
 // router.js
 
-var express             = require('express');
-var bodyCheckMiddleware = require('object-checker').bodyCheckMiddleware;
+var express                    = require('express');
+var expressBodyCheckMiddleware = require('object-checker').expressBodyCheckMiddleware;
 
 var router = express.Router();
 
@@ -141,18 +100,18 @@ var opt = {
     $maxLength: 20
   }
 };
-router.post('/users', bodyCheckMiddleware(opt), handlerFunction);
+router.post('/users', expressBodyCheckMiddleware(opt), handlerFunction);
 
 module.exports = router;
 ```
 
-### Play with other modules (javascript)
+### Play with other modules
 ```javascript
 // router.js
 
-var express             = require('express');
-var bodyCheckMiddleware = require('object-checker').bodyCheckMiddleware;
-var validator           = require('validator'); // 3rd-part validator module
+var express                    = require('express');
+var expressBodyCheckMiddleware = require('object-checker').expressBodyCheckMiddleware;
+var validator                  = require('validator'); // 3rd-part validator module
 
 var router = express.Router();
 
@@ -165,12 +124,12 @@ var opt = {
     $maxLength: 20
   }
 };
-router.post('/users', bodyCheckMiddleware(opt), handlerFunction);
+router.post('/users', expressBodyCheckMiddleware(opt), handlerFunction);
 
 module.exports = router;
 ```
 
-### Custom options and messageTemplate in a instance (javascript)
+### Custom customDirectives and messageTemplate
 ```javascript
 var objectChecker = require('../object-checker');
 var checker = objectChecker.createObjectChecker({
@@ -185,27 +144,26 @@ var checker = objectChecker.createObjectChecker({
   }
 };
 
-checker.isValid(...);
-});
+checker.verify(yourObject);
 ```
 
 ### Custom error message and error handler in middleware (javascript)
 ```javascript
 var objectChecker = require('../object-checker');
 objectChecker.messageTemplate = {
-  "invalid": "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
-  "missing": "Missing {{fieldName}}",
-  "unexpected": "Not support {{fieldName}}"
+  invalid   : "Value of Field `{{fieldName}}` is not valid. Got `{{fieldValue}}`, but require {{checkerName}} = {{checkerOption}}",
+  missing   : "Missing {{fieldName}}",
+  unexpected: "Not support {{fieldName}}"
 };
 ```
 
 ```javascript
 var objectChecker = require('../object-checker');
-objectChecker.errorHandler = function(err, req, res, next) {
+objectChecker.expressErrorHandler = function(err, req, res, next) {
   console.log(err);
   var template = {
-    "invalid": "invalid request",
-    "missing": "missing parameter",
+    "invalid"   : "invalid request",
+    "missing"   : "missing parameter",
     "unexpected": "found unexpected parameter"
   };
   res.send({
