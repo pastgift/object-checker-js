@@ -235,7 +235,7 @@
 
     if (typeof obj === 'undefined') {
       var e = new Error();
-      e.type = 'missing';
+      e.type      = 'missing';
       e.fieldName = objName || 'obj';
       throw e;
     }
@@ -250,7 +250,7 @@
       for (var objKey in obj) {
         if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
           var e = new Error();
-          e.type = 'unexpected';
+          e.type      = 'unexpected';
           e.fieldName = objKey;
           throw e;
         }
@@ -271,10 +271,10 @@
         var checkResult = checkFunc(obj, option);
         if (checkResult === false) {
           var e = new Error();
-          e.type = 'invalid';
-          e.fieldName = objName;
-          e.fieldValue = obj;
-          e.checkerName = optionKey;
+          e.type          = 'invalid';
+          e.fieldName     = objName;
+          e.fieldValue    = obj;
+          e.checkerName   = optionKey;
           e.checkerOption = option;
           throw e
         }
@@ -288,11 +288,11 @@
         var checkResult = _validator[validatorFuncName].apply(_validator, [obj].concat(validatorOptions));
         if (checkResult != validatorAssert) {
           var e = new Error();
-          e.type = 'invalid';
-          e.fieldName = objName;
-          e.fieldValue = obj;
-          e.checkerName = optionKey;
-          e.checkerOption = JSON.stringify(option);
+          e.type          = 'invalid';
+          e.fieldName     = objName;
+          e.fieldValue    = obj;
+          e.checkerName   = optionKey;
+          e.checkerOption = option;
           throw e
         }
       } else {
@@ -322,7 +322,8 @@
   ObjectChecker.prototype.check = function(obj, options) {
     var ret = {
       isValid: true,
-      message: null
+      message: null,
+      detail : null,
     }
 
     try {
@@ -331,6 +332,13 @@
     } catch (error) {
       ret.isValid = false;
       ret.message = createErrorMessage(error, this.messageTemplate);
+      ret.detail = {
+        type         : error.e.type,
+        fieldName    : error.e.fieldName,
+        fieldValue   : error.e.fieldValue,
+        checkerName  : error.e.checkerName,
+        checkerOption: error.e.checkerOption,
+      };
     }
 
     return ret;
