@@ -313,7 +313,7 @@
   ObjectChecker.prototype.isValid = function(obj, options) {
     try {
       this.verify(obj, options, 'obj');
-    } catch (error) {
+    } catch (e) {
       return false;
     }
     return true;
@@ -329,15 +329,15 @@
     try {
       this.verify(obj, options, 'obj');
 
-    } catch (error) {
+    } catch (e) {
       ret.isValid = false;
-      ret.message = createErrorMessage(error, this.messageTemplate);
+      ret.message = createErrorMessage(e, this.messageTemplate);
       ret.detail = {
-        type         : error.e.type,
-        fieldName    : error.e.fieldName,
-        fieldValue   : error.e.fieldValue,
-        checkerName  : error.e.checkerName,
-        checkerOption: error.e.checkerOption,
+        type         : e.type,
+        fieldName    : e.fieldName,
+        fieldValue   : e.fieldValue,
+        checkerName  : e.checkerName,
+        checkerOption: e.checkerOption,
       };
     }
 
@@ -355,8 +355,8 @@
       var checkOptions = options;
       try {
         this.verify(checkTarget, checkOptions, 'req.body');
-      } catch (error) {
-        this.expressErrorHandler(error, req, res, next);
+      } catch (e) {
+        this.expressErrorHandler(e, req, res, next);
         return;
       }
       next();
