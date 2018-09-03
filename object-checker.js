@@ -116,6 +116,10 @@
       return v === value;
     },
 
+    $notValue: function(v, value) {
+      return v !== value;
+    },
+
     $in: function(v, inRange) {
       for (var i in inRange) {
         if (inRange[i] === v) {

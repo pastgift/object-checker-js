@@ -219,6 +219,8 @@ objectChecker.expressErrorHandler = function(err, req, res, next) {
   - Max value should be `option`.
 - $isValue: `option`
   - Should be `option`
+- $notValue: `option`
+  - Should not be `option`
 - $in: [`option1`, `option2`, ...]
   - Value should be in the array.
 - $notIn: [`option1`, `option2`, ...]
