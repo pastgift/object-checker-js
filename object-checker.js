@@ -233,8 +233,19 @@
       return;
     }
 
-    if ((options.$allowNull === true) && (obj === null)) {
-      return;
+    if (obj === null) {
+      if (options.$allowNull === true) {
+        return;
+
+      } else if (options.$allowNull === false) {
+        var e = new Error();
+        e.type          = 'invalid';
+        e.fieldName     = objName || 'obj';
+        e.fieldValue    = obj;
+        e.checkerName   = '$allowNull';
+        e.checkerOption = options.$allowNull;
+        throw e
+      }
     }
 
     if (typeof obj === 'undefined') {
