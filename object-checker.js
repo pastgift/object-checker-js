@@ -25,6 +25,10 @@
           var re = /^(-?[1-9][0-9]*)|0$/;
           return 'number' === typeof v && re.test(v);
 
+        case 'bool':
+        case 'boolean':
+          return 'boolean' === typeof v;
+
         case 'arr':
         case 'array':
           return Array.isArray(v);
