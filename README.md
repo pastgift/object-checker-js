@@ -200,7 +200,7 @@ objectChecker.expressErrorHandler = function(err, req, res, next) {
 - $assertFalse: `assertFunction`
   - `assertFunction(value)` should return `false`.
 - $notEmptyString: true
-  - Should be `''`.
+  - Should not be `''`.
 - $isInteger: ture
   - Should be an integer.
 - $isPositiveZeroInteger: Renamed to `$isPositiveIntegerOrZero`

@@ -163,10 +163,6 @@
       return v.length === length;
     },
 
-    $isEmail: function(v, flg) {
-      return flg === _validator.isEmail(v);
-    },
-
     $matchRegExp: function(v, regExp) {
       if ('string' === typeof(regExp)) {
         regExp = new RegExp(regExp);
@@ -180,6 +176,14 @@
       }
       return !regExp.test(v);
     }
+
+    $isEmail: function(v, flg) {
+      return flg === _validator.isEmail(v);
+    },
+
+    $isISO8601: function(v, flg) {
+      return flg === _validator.isISO8601(v);
+    },
   };
 
   /* Functional methods */
