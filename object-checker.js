@@ -175,7 +175,7 @@
         regExp = new RegExp(regExp);
       }
       return !regExp.test(v);
-    }
+    },
 
     $isEmail: function(v, flg) {
       return flg === _validator.isEmail(v);
