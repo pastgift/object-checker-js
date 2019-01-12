@@ -124,18 +124,34 @@
       return v !== value;
     },
 
-    $in: function(v, inRange) {
-      for (var i in inRange) {
-        if (inRange[i] === v) {
+    $in: function(v, inOptions) {
+      for (var i = 0; i < inOptions.length; i++) {
+        if (inOptions[i] === v) {
           return true;
         }
       }
       return false;
     },
 
-    $notIn: function(v, inRange) {
-      for (var i in inRange) {
-        if (inRange[i] === v) {
+    $commaArrayIn: function(v, inOptions) {
+      v = v.split(',');
+
+      var inOptionMap = {};
+      for (var i = 0; i < inOptions.length; i++) {
+        inOptionMap[inOptions[i]] = true;
+      }
+
+      for (var i = 0; i < v.length; i++) {
+        if (!inOptionMap[v[i]]) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    $notIn: function(v, inOptions) {
+      for (var i = 0; i < inOptions.length; i++) {
+        if (inOptions[i] === v) {
           return false;
         }
       }

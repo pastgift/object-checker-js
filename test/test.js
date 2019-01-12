@@ -758,4 +758,30 @@ describe('main', function() {
     };
     assert.equal(false,  checker.isValid(obj, opt));
   });
+
+  it('$commaArrayIn ', function() {
+    var opt = {
+      foo: {
+        $type        : 'string',
+        $commaArrayIn: ['a', 'b', 'c']
+      }
+    };
+    var obj = {
+      foo: 'a,b'
+    };
+    assert.equal(true,  checker.isValid(obj, opt));
+  });
+
+  it('$commaArrayIn ', function() {
+    var opt = {
+      foo: {
+        $type        : 'string',
+        $commaArrayIn: ['a', 'b', 'c']
+      }
+    };
+    var obj = {
+      foo: 'a,x'
+    };
+    assert.equal(false,  checker.isValid(obj, opt));
+  });
 });
