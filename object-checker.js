@@ -284,7 +284,7 @@
       return;
     }
 
-    if (typeof obj === 'object' && typeof obj != 'undefined' && obj != null
+    if (typeof obj === 'object' && obj != null
       && objType !== 'json' && objType !== 'obj' && objType !== 'object') {
       for (var objKey in obj) {
         if (!(objKey in options) && !('$' in options && Array.isArray(obj))) {
@@ -296,8 +296,22 @@
       }
     }
 
-    for (var optionKey in options) {
-      var option = options[optionKey];
+    var optionKeys = [];
+    for (var optionKey in options) optionKeys.push(optionKey);
+
+    optionKeys.sort(function(x, y) {
+      if (x === '$type') {
+        return -1;
+      } else if (y === '$type') {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    for (var i = 0; i < optionKeys.length; i++) {
+      var optionKey = optionKeys[i];
+      var option    = options[optionKey];
 
       var hasOption = false;
       var checkFunc = null;
