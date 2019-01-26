@@ -13,6 +13,7 @@
       switch (t.toLowerCase()) {
         case 'str':
         case 'string':
+        case 'commaarray':
           return 'string' === typeof v;
 
         case 'num':
