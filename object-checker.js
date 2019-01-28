@@ -247,13 +247,13 @@
     options = options || {};
 
     if (this.defaultRequired === true
-        && (options.$isOptional || options.$optional) === true
+        && (options.$isOptional === true || options.$optional === true || options.$optional === 'itDepends')
         && typeof obj === 'undefined') {
       return;
     }
 
     if (this.defaultRequired === false
-        && (options.$isRequired || options.$required) !== true
+        && (options.$isRequired !== true && options.$required !== true)
         && typeof obj === 'undefined') {
       return;
     }
