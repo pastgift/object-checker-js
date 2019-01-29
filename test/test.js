@@ -784,4 +784,108 @@ describe('main', function() {
     };
     assert.equal(false,  checker.isValid(obj, opt));
   });
+
+  it('$Additional ', function() {
+    var checker = objectChecker.createObjectChecker({
+      defaultRequired: false,
+      customDirectives: {
+        '$desc'   : null,
+        '$name'   : null,
+        '$example': null,
+      },
+    });
+
+    var opt = {
+      "data": {
+          "$isRequired": true,
+          "namespace": {
+              "$desc": "命名空间",
+              "$isRequired": true,
+              "$type": "string",
+              "$notEmptyString": true,
+              "$example": "default",
+              "$notIn": [
+                  "ldap"
+              ]
+          },
+          "name": {
+              "$desc": "名称（操作人姓名）",
+              "$isRequired": true,
+              "$type": "string",
+              "$notEmptyString": true,
+              "$example": "张三"
+          },
+          "password": {
+              "$desc": "密码",
+              "$allowNull": true,
+              "$type": "string",
+              "$notEmptyString": true,
+              "$example": "zhang3password"
+          },
+          "email": {
+              "$desc": "邮箱（可用于登录）",
+              "$allowNull": true,
+              "$type": "string",
+              "$isEmail": true,
+              "$example": "zhang3@jiagouyun.com"
+          },
+          "mobile": {
+              "$desc": "手机号（可用于登录）",
+              "$allowNull": true,
+              "$type": "string",
+              "$example": "18000000000"
+          },
+          "username": {
+              "$desc": "用户名（可用于登录）",
+              "$allowNull": true,
+              "$type": "string",
+              "$example": "zhang3"
+          },
+          "status": {
+              "$desc": "状态（预留字段，暂时无用）",
+              "$type": "enum",
+              "$in": [
+                  "normal"
+              ]
+          }
+      },
+      "teams": {
+          "$desc": "创建同时添加至团队",
+          "$": {
+              "id": {
+                  "$desc": "团队ID",
+                  "$isRequired": true,
+                  "$type": "string"
+              },
+              "isDefault": {
+                  "$desc": "是否为默认团队",
+                  "$type": "boolean",
+                  "$example": true
+              },
+              "isAdmin": {
+                  "$desc": "是否为管理员",
+                  "$type": "boolean",
+                  "$example": false
+              }
+          }
+      }
+    };
+    var body = {
+      "data": {
+        "namespace": "default",
+        "name": "666",
+        "password": "666",
+        "email": "666@jiagouyun.com"
+      },
+      "teams": [
+        {
+          "id": "team-vLc7r2EMx7TRxCkVn13Fez",
+          "isDefault": false,
+          "isAdmin": false
+        }
+      ]
+    };
+    var ret = checker.check(body, opt);
+    assert.equal(true, ret.isValid);
+  });
 });

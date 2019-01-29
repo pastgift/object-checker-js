@@ -353,7 +353,7 @@
         if (['$isOptional', '$optional', '$isRequired', '$required', '$allowNull'].indexOf(optionKey) > -1) {
           // no op
         } else if (optionKey === '$') {
-          for (var i in obj) {
+          for (var i = 0; i < obj.length; i++) {
             var element = obj[i];
             this.verify(element, option, objName + '[' + i + ']');
           }
