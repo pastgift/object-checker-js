@@ -785,7 +785,7 @@ describe('main', function() {
     assert.equal(false,  checker.isValid(obj, opt));
   });
 
-  it('$Additional ', function() {
+  it('Additional ', function() {
     var checker = objectChecker.createObjectChecker({
       defaultRequired: false,
       customDirectives: {
@@ -888,4 +888,45 @@ describe('main', function() {
     var ret = checker.check(body, opt);
     assert.equal(true, ret.isValid);
   });
+
+  it('Additional 2', function() {
+    var checker = objectChecker.createObjectChecker({
+      defaultRequired: false,
+      customDirectives: {
+        '$desc'   : null,
+        '$name'   : null,
+        '$example': null,
+      },
+    });
+
+    var opt = {
+        "task": {
+            "$isRequired": true,
+            "kwargs": {
+                "$desc": "字典参数（**kwargs）",
+                "$isRequired": true,
+                "$type": "json",
+                "issueSourceIds": {
+                    "$desc": "情报源ID列表",
+                    "$isRequired": true,
+                    "$": {
+                        "$desc": "情报源ID",
+                        "$type": "string",
+                        "$example": []
+                    }
+                }
+            }
+        }
+    };
+    var body = {
+      "task": {
+        "kwargs": {
+          "issueSourceIds": []
+        }
+      }
+    };
+    var ret = checker.check(body, opt);
+    assert.equal(true, ret.isValid);
+  });
+
 });
