@@ -37,7 +37,7 @@
         case 'json':
         case 'obj':
         case 'object':
-          return 'object' === typeof v;
+          return 'object' === typeof v && !Array.isArray(v);
 
         case 'jsonstring':
           try {
