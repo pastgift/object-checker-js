@@ -198,6 +198,9 @@
       return flg === _validator.isEmail(v);
     },
 
+    $isDate: function(v, flg) {
+      return flg === _validator.isDate(v);
+    },
     $isISO8601: function(v, flg) {
       return flg === _validator.isISO8601(v);
     },
