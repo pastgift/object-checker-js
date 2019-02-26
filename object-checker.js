@@ -198,13 +198,12 @@
       return flg === _validator.isEmail(v);
     },
 
-    $isDate: function(v, flg) {
-      return flg === _validator.isDate(v);
-    },
     $isISO8601: function(v, flg) {
-      return flg === _validator.isISO8601(v);
+      return flg === _validator.isISO8601(v, {strict: true});
     },
   };
+  DIRECTIVES.$isDate = DIRECTIVES.$isISO8601;
+  DIRECTIVES.$isDateTime = DIRECTIVES.$isISO8601;
 
   /* Functional methods */
   function createErrorMessage(e, template) {
