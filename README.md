@@ -113,13 +113,13 @@ module.exports = router;
 
 var express                    = require('express');
 var expressBodyCheckMiddleware = require('object-checker').expressBodyCheckMiddleware;
-var validator                  = require('validator'); // 3rd-part validator module
+var validator                  = require('validator'); // 3rd-party validator module
 
 var router = express.Router();
 
 var opt = {
   username: {
-    $assertTrue: validator.isEmail  // 3rd-part validator function(value){...}
+    $assertTrue: validator.isEmail  // 3rd-party validator function(value){...}
   },
   password: {
     $minLength: 6,
