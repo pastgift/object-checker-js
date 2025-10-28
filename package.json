@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/pastgift/object-checker-js",
   "dependencies": {
-    "validator": "10.11.0"
+    "validator": "13.15.20"
   }
 }
